@@ -8,6 +8,7 @@ from java.awt import FlowLayout
 from javax.swing import Box
 from javax.swing import JPanel
 from javax.swing import JTextArea
+from javax.swing import JTextField
 from javax.swing import JScrollPane
 from javax.swing import JButton
 from javax.swing import JFileChooser
@@ -30,8 +31,8 @@ from CommandCompiler import CommandLineCompiler
 class GUI(java.lang.Runnable):
     def __init__(self):
         self.resultText = str()
-        self.cmd_compiler = None    # CommandLineCompiler()
-        self.tree_builder = None    # TreeBuilder
+        self.cmd_compiler = None  # CommandLineCompiler()
+        self.tree_builder = None  # TreeBuilder
         self.directory = None
         self.frame = None
         self.area = None
@@ -39,6 +40,9 @@ class GUI(java.lang.Runnable):
         self.command_editor = None
         self.chooser = None
         self.check_box = None
+
+    def project_warning(self, txt):
+        self.area.append("\n" + txt + "\n")
 
     def projectile_pane(self, buffer_txt):
         i = 1
@@ -60,14 +64,25 @@ class GUI(java.lang.Runnable):
         # ------------------------------------- projectile -------------------------------------
         buffer_txt = LinkedQueue()
         for txt in self.tree_builder.words_tree.traverse():
+            print(txt)
             if buffer_txt is None:
                 buffer_txt = LinkedQueue()
             buffer_txt.enqueue(txt)
             if len(buffer_txt) > 4:
                 self.projectile_pane(buffer_txt)
                 buffer_txt = None
-
+        self.area.append("-------------------------------- end ----\n")
         # ------------------------------------- projectile -------------------------------------
+
+    def compiler(self, command):
+        self.command_editor = CommandLineCompiler(command, self.tree_builder.tree_type, self.tree_builder.words_tree)
+
+
+
+
+
+
+
 
 
 
@@ -95,9 +110,9 @@ class GUI(java.lang.Runnable):
         )
 
         self.chooser = JButton(
-                'Browse',
-                font = ("Comic Sans MS", 30, 30),
-                actionPerformed=self.showFC
+            'Browse',
+            font=("Comic Sans MS", 30, 30),
+            actionPerformed=self.showFC
         )
 
         self.area = JTextArea(
@@ -107,13 +122,12 @@ class GUI(java.lang.Runnable):
             columns=45
         )
 
-        self.command_editor = JTextArea(
+        self.command_editor = JTextField(
             font=("Comic Sans MS", 30, 30),
-            rows=2,
-            columns=45,
+            actionPerformed=self.update
         )
 
-        panel = [None]*7
+        panel = [None] * 7
         panel[0] = JPanel()
         panel[0].setLayout(BorderLayout())
         panel[0].add(self.chooser)
@@ -186,8 +200,15 @@ class GUI(java.lang.Runnable):
             message = 'Request canceled by user'
         self.label.setText(message)
 
-    def update(self):
-        pass
+    def update(self, event):
+        value = event.getActionCommand()
+        try:
+            val = str(value)
+            self.compiler(val)
+
+        except Exception as err:
+            print(err)
+
 
 if __name__ in ['__main__', 'main']:
     EventQueue.invokeLater(GUI())

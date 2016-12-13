@@ -145,7 +145,7 @@ class BST:
         self.root = None
         self.NodeType = NodeType
         self.psroot = self.NodeType(None, None)
-        self.content = LinkedList()
+        self.content = []
         self.docs = LinkedList()
 
     # -------------------------------------------------------------------------------------------------
@@ -181,15 +181,20 @@ class BST:
         else:
             return self.root.rank(key)
 
-    def traverse(self, node=None):
+    def traverse(self):
+        self._traverse()
+        for i in self.content:
+            yield i
+
+    def _traverse(self, node=None):
         if node is None:
             node = self.root
 
-        self.content.add_last(node)
+        self.content.append(node.key)
         if node.left is not None:
-            self.traverse(node=node.left)
+            self._traverse(node=node.left)
         if node.right is not None:
-            self.traverse(node=node.right)
+            self._traverse(node=node.right)
 
     def delete(self, key):
         node = self.find(key)

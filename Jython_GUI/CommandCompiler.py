@@ -9,12 +9,10 @@ from TrieST import TrieST
 
 class CommandLineCompiler:
 
-    def __init__(self, command, tree_type, word_tree):
-        self.resultText = tkinter.Text()
+    def __init__(self, command, directory_field, tree_type):
         self.tree_type = tree_type
-        self.wordTree = word_tree
-        self.files_list = LinkedList()
-        self.directory_text_field = tkinter.Entry()
+        self.files_list = []
+        self.directory_text_field = directory_field
         self._sytax_of_command_line(command)
 
     def _sytax_of_command_line(self, command):
@@ -52,7 +50,7 @@ class CommandLineCompiler:
                     for separate_word in command_words[1:]:
                         name_of_file += separate_word
                     file_exist = False
-                    for subdir, dirs, files in os.walk(self.directory_text_field.get()):
+                    for subdir, dirs, files in os.walk(self.directory_text_field.toString()):
                         for file in files:
                             if name_of_file in file:
                                 file_exist = True
