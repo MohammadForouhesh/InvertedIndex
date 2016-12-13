@@ -59,7 +59,7 @@ class GUI(java.lang.Runnable):
         self.tree_builder = TreeBuilder(tree_name, self.directory)
         # ------------------------------------- projectile -------------------------------------
         buffer_txt = LinkedQueue()
-        for txt in self.tree_builder.stopwordsTrie.traverse():
+        for txt in self.tree_builder.words_tree.traverse():
             if buffer_txt is None:
                 buffer_txt = LinkedQueue()
             buffer_txt.enqueue(txt)

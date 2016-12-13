@@ -16,7 +16,7 @@ class TreeBuilder:
         self.stopwordsBST = BST()
         self.stopwordsTST = TST()
         self.stopwordsTrie = TrieST()
-        self.word_tree = None
+        self.words_tree = TST()
         self.stopwords_init()
         self._build(directory_entered)
 
@@ -44,12 +44,8 @@ class TreeBuilder:
         self.stopwordsTrie.validation()
 
     def _build(self, directory_entered):
-        print("----------------------------------------")
-        print(directory_entered)
-        print(self.tree_type)
-        print("----------------------------------------")
         if True:  # os.path.isdir(directory_entered.get()):
-            if type(self.tree_type) == TST:
+            if unicode(self.tree_type) == unicode('TST'):
                 print("----------------------------------------")
                 print("TST")
                 print(type(self.tree_type))
@@ -58,23 +54,23 @@ class TreeBuilder:
                 # TST Tree
                 self.words_tree = TST()
                 counter = 0
-                for subdir, dirs, files in os.walk(directory_entered.get()):
+                for subdir, dirs, files in os.walk(directory_entered.toString()):
                     for file in files:
                         if file.endswith('.txt'):
                             self.files_list.add_last(str(file))
-                            fp = open(os.path.join(subdir, file), 'r+', errors='ignore')
+                            fp = open(os.path.join(subdir, file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTST.keysWithPrefix(key)) == 0:
                                     if len(self.words_tree.keysThatMatch(key)) == 0:
-                                        # TODO code here
-                                        self.words_tree.add_doc(files[:-4])
+                                        # self.words_tree.add_doc(files[:-4])
                                         self.words_tree.put(str(key), counter)
                                         counter += 1
 
                             fp.close()
 
                 self.words_tree.validation()
+
                 print("--------------------------Test traverse and correct words")
                 i = 0
                 for t in self.words_tree.traverse():
@@ -82,27 +78,30 @@ class TreeBuilder:
                     i += 1
                 print(i)
 
-            elif type(self.tree_type) == BST:
+            elif unicode(self.tree_type) == unicode('BST'):
 
                 print("----------------------------------------")
                 print(type(self.tree_type))
                 print("----------------------------------------")
                 # BST Search
+                del self.words_tree
                 self.words_tree = BST()
-                counter = 0
-                for subdir, dirs, files in os.walk(directory_entered.get()):
+                print(type(self.words_tree))
+
+                for subdir, dirs, files in os.walk(directory_entered.toString()):
                     for file in files:
                         if file.endswith('.txt'):
                             self.files_list.add_last((str(file)))
-                            fp = open(os.path.join(subdir, file), 'r+', errors='ignore')
+                            fp = open(os.path.join(subdir, file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
                                 if self.stopwordsBST.find(key) is None:
                                     self.words_tree.insert(str(key))
-                                    counter += 1
                             fp.close()
 
-            elif type(self.tree_type) == TrieST:
+                print(type(self.words_tree))
+
+            elif unicode(self.tree_type) == unicode('TrieST'):
                 print("----------------------------------------")
                 print("TrieST")
                 print(type(self.tree_type))
@@ -110,11 +109,11 @@ class TreeBuilder:
                 # Trie Search
                 self.words_tree = TrieST()
                 counter = 0
-                for subdir, dirs, files in os.walk(directory_entered.get()):
+                for subdir, dirs, files in os.walk(directory_entered.toString()):
                     for file in files:
                         if file.endswith('.txt'):
                             self.files_list.add_last((str(file)))
-                            fp = open(os.path.join(subdir, file), 'r+', errors='ignore')
+                            fp = open(os.path.join(subdir, file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTrie.keysWithPrefix(key)) == 0:
