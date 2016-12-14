@@ -36,7 +36,7 @@ class GUI(java.lang.Runnable):
         self.resultText = str()
         self.cmd_compiler = None  # CommandLineCompiler()
         self.tree_builder = None  # TreeBuilder
-        self.files_list = []
+        self.files_list = list()
         self.directory = None
         self.frame = None
         self.area = None
@@ -73,10 +73,15 @@ class GUI(java.lang.Runnable):
             if len(buffer_txt) > 4:
                 self.projectile_pane(buffer_txt)
                 buffer_txt = None
+
+        if buffer_txt is not None:
+            self.projectile_pane(buffer_txt)
+
         self.area.append("-------------------------------- end ----\n")
         # ------------------------------------- projectile -------------------------------------
 
     def builder(self, tree_name):
+        self.files_list = None
         self.tree_builder = TreeBuilder(tree_name, self.directory)
         self.files_list = self.tree_builder.files_list
         # ------------------------------------- projectile -------------------------------------
@@ -162,6 +167,7 @@ class GUI(java.lang.Runnable):
                     file_name_found = False
                     files_to_delete = [name_of_file_added for name_of_file_added in self.files_list if
                                        name_of_file_added.documentName == name_of_file]
+                    # kir khar
                     for file_going_to_delete in files_to_delete:
                         file_name_found = True
                         file_going_to_delete.removeAll()
@@ -226,19 +232,18 @@ class GUI(java.lang.Runnable):
 
                 return True
             elif current_state == 10:
-                for file in self.files_list:
-                    self.project_warning(file + ' ')
-                    print("success")
-                    self.project_warning('\nNumber of listed Docs = ' + str(len(self.files_list)) + '\n---------------\n')
+                self.bufferizer(self.files_list)
+                print("success")
+                self.project_warning('\nNumber of listed Docs = ' + str(len(self.files_list)) + '\n---------------\n')
                 return True
             elif current_state == 11:
-                number_of_files = 0
+                queue = []
                 for subdir, dirs, files in os.walk(self.directory.toString()):
                     for file in files:
                         if file.endswith('.txt'):
-                            self.project_warning(file[:-4] + ' ')
-                            number_of_files += 1
-                self.project_warning('\nNumber of all Docs = ' + str(number_of_files) + '\n---------------\n')
+                            queue.append(file[:-4] + ' ')
+                self.bufferizer(queue)
+                self.project_warning('\nNumber of all Docs = ' + str(len(queue)) + '\n---------------\n')
                 return True
 
             elif current_state == 12:
@@ -263,7 +268,7 @@ class GUI(java.lang.Runnable):
                     if not self.tree_builder.words_tree[command_words[-1]]:
                         self.project_warning('\nAny word found !!!\n---------------\n')
                     else:
-                        self.project_warning(self.tree_builder.words_tree[command_words[-1]].refrence.getAll())
+                        self.project_warning(self.tree_builder.words_tree.__getitem__(command_words[-1], get_doc=True))
                 current_state = 20  # <-- This live has to change -->
                 return True
             elif current_state == 13:
@@ -280,9 +285,10 @@ class GUI(java.lang.Runnable):
                     ######################################################################################################################
                 if command_words[-1] is command_words[2]:
                     if not self.tree_builder.words_tree[command_words[-1]]:
-                        self.project_warning('\nAny word found !!!\n')
+                        self.project_warning("\nThere is no such word !!!\n")
                     else:
-                        self.project_warning(self.tree_builder.words_tree[command_words[-1]].refrence.getAll())
+                        print(self.tree_builder.words_tree.__getitem__(command_words[-1], get_doc=True))
+                        self.bufferizer(self.tree_builder.words_tree.__getitem__(command_words[-1], get_doc=True))
                 current_state = 20  # <-- This live has to change -->
                 return True
             else:
@@ -416,14 +422,15 @@ class GUI(java.lang.Runnable):
 
     def update(self, event):
         value = event.getActionCommand()
-        try:
-            val = str(value)
-            print(val)
-            self.compiler(val, self.tree_builder.tree_type)
+#        try:
+        val = str(value)
+        print(val)
+        self.compiler(val, self.tree_builder.tree_type)
 
-        except Exception as err:
-            print("khar")
-            print(err)
+        #except Exception as err:
+            #print("khar")
+            #print(err)
+            #raise Exception(err)
 
 
 if __name__ in ['__main__', 'main']:

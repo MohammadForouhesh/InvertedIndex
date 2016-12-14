@@ -8,6 +8,7 @@ class TrieST:
     class Node:
         def __init__(self):
             self.value = str()
+            self.doc_list = []
             self._next = [None] * TrieST.R
 
     def __init__(self):
@@ -25,11 +26,15 @@ class TrieST:
     def is_empty(self):
         return self.__sizeof__() == 0
 
-    def __getitem__(self, key):
+    def __getitem__(self, key, get_doc=None):
         x = self.get(self.root, key, 0)
         if x is None:
             return None
-        return str(x.value)
+        if get_doc is None:
+            return str(x.value)
+        else:
+            print(x.doc_list)
+            return x.doc_list
 
     def __contains__(self, key):
         return self.__getitem__(key) is not None
@@ -42,22 +47,24 @@ class TrieST:
         char = key[d]
         return self.get(x._next[int(ord(char))], key, d + 1)
 
-    def put(self, key, value):
+    def put(self, key, value, set_doc):
         if value is None:
             del key
         else:
-            self.root = self.set(self.root, key, value, 0)
+            self.root = self.set(self.root, key, value, 0, set_doc)
 
-    def set(self, x, key, value, d):
+    def set(self, x, key, value, d, set_doc):
         if x is None:
             x = self.Node()
         if d == len(key):
             if x.value is None:
                 self.number_of_keys += 1
             x.value = value
+            if set_doc is not None:
+                x.doc_list.append(set_doc)
             return x
         char = key[d]
-        x._next[int(ord(char))] = self.set(x._next[int(ord(char))], key, value, d + 1)
+        x._next[int(ord(char))] = self.set(x._next[int(ord(char))], key, value, d + 1, set_doc)
         return x
 
     def keys(self):

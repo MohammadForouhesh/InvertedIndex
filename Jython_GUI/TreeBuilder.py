@@ -12,7 +12,7 @@ from TrieST import TrieST
 class TreeBuilder:
     def __init__(self, tree_type, directory_entered):
         self.tree_type = tree_type
-        self.files_list = LinkedList()
+        self.files_list = list()
         self.stopwordsBST = BST()
         self.stopwordsTST = TST()
         self.stopwordsTrie = TrieST()
@@ -39,7 +39,7 @@ class TreeBuilder:
 
         i = 0
         for q in fileQueue:
-            self.stopwordsTrie.put(str(q.element), i)
+            self.stopwordsTrie.put(str(q.element), i, None)
             i += 1
         self.stopwordsTrie.validation()
 
@@ -57,13 +57,13 @@ class TreeBuilder:
                 for subdir, dirs, files in os.walk(directory_entered.toString()):
                     for file in files:
                         if file.endswith('.txt'):
-                            self.files_list.add_last(str(file))
+                            self.files_list.append(str(file))
                             fp = open(os.path.join(subdir, file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTST.keysWithPrefix(key)) == 0:
                                     if len(self.words_tree.keysThatMatch(key)) == 0:
-                                        # self.words_tree.add_doc(files[:-4])
+                                        # self.words_tree.put(files[:-4])
                                         self.words_tree.put(str(key), counter)
                                         counter += 1
 
@@ -91,7 +91,7 @@ class TreeBuilder:
                 for subdir, dirs, files in os.walk(directory_entered.toString()):
                     for file in files:
                         if file.endswith('.txt'):
-                            self.files_list.add_last((str(file)))
+                            self.files_list.append((str(file)))
                             fp = open(os.path.join(subdir, file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
@@ -110,14 +110,14 @@ class TreeBuilder:
                 self.words_tree = TrieST()
                 counter = 0
                 for subdir, dirs, files in os.walk(directory_entered.toString()):
-                    for file in files:
-                        if file.endswith('.txt'):
-                            self.files_list.add_last((str(file)))
-                            fp = open(os.path.join(subdir, file), 'r+')
+                    for _file in files:
+                        if _file.endswith('.txt'):
+                            self.files_list.append((str(_file)))
+                            fp = open(os.path.join(subdir, _file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTrie.keysWithPrefix(key)) == 0:
-                                    self.words_tree.put(str(key), counter)
+                                    self.words_tree.put(str(key), counter, _file)
                                     counter += 1
                             fp.close()
                 self.words_tree.validation()
