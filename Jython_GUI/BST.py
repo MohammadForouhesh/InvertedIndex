@@ -33,6 +33,7 @@ class BST:
                     return self.left.insert(key, NodeType, set_doc)
             elif key == self.key:
                 self.repetition += 1
+                self.size -= 1
                 if set_doc is not None:
                     self.doc_list.append(set_doc)
                 return
@@ -176,7 +177,7 @@ class BST:
 
     # --------------------------------------------------------------------------------------------------
 
-    def __getitem__(self, key, get_doc=None):
+    def __getitem__(self, key, get_doc=None, trav=False):
         """Return the node for key if is in the tree, or None otherwise."""
         if self.root is None:
             return None

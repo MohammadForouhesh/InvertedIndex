@@ -26,14 +26,16 @@ class TrieST:
     def is_empty(self):
         return self.__sizeof__() == 0
 
-    def __getitem__(self, key, get_doc=None):
+    def __getitem__(self, key, get_doc=None, trav=False):
         x = self.get(self.root, key, 0)
         if x is None:
             return None
-        if get_doc is None:
+        if get_doc is None and trav is False:
             return str(x.value)
-        else:
+        elif get_doc is not None:
             return x.doc_list
+        elif trav:
+            return x
 
     def __contains__(self, key):
         return self.__getitem__(key) is not None

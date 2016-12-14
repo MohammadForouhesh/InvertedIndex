@@ -19,15 +19,8 @@ from javax.swing import JFrame
 from javax.swing import JLabel
 
 # Inverted Index library
-from TST import TST
-from BST import BST
-from TrieST import TrieST
-from DynamicArray import DynamicArray
-from LinkedList import LinkedList
 from LinkedQueue import LinkedQueue
-from LinkedStack import LinkedStack
 from TreeBuilder import TreeBuilder
-from CommandCompiler import CommandLineCompiler
 
 
 class GUI(java.lang.Runnable):
@@ -55,7 +48,7 @@ class GUI(java.lang.Runnable):
                 continue
             string = " " + text.element
             if len(string) < 13:
-                string += "\t"
+                string += ", "
             else:
                 string += " "
             self.area.append("{}".format(string))
@@ -69,14 +62,14 @@ class GUI(java.lang.Runnable):
                 buffer_txt = LinkedQueue()
         # ------------------------------------- projectile -------------------------------------
             buffer_txt.enqueue(txt)
-            if len(buffer_txt) > 4:
+            if len(buffer_txt) > 10:
                 self.projectile_pane(buffer_txt)
                 buffer_txt = None
 
         if buffer_txt is not None:
             self.projectile_pane(buffer_txt)
 
-        self.area.append("-------------------------------- end ----\n")
+        self.area.append("--------------------------------------------------------------------------\n")
         # ------------------------------------- projectile -------------------------------------
 
     def builder(self, tree_name):
@@ -84,7 +77,19 @@ class GUI(java.lang.Runnable):
         self.tree_builder = TreeBuilder(tree_name, self.directory)
         self.files_list = self.tree_builder.files_list
         # ------------------------------------- projectile -------------------------------------
-        self.bufferizer(self.tree_builder.words_tree.traverse())
+        number = 1
+        for word in self.tree_builder.words_tree.traverse():
+            temp_list = list()
+            temp_list.append("[*{}*] ".format(number) + str(word) + " *--->  ")
+            for doc in self.tree_builder.words_tree.__getitem__(word, trav=True).doc_list:
+                if doc[:-4] not in temp_list:
+                    print(doc)
+                    temp_list.append(doc[:-4])
+            self.bufferizer(temp_list)
+            number += 1
+
+        self.project_warning("number of words in {} : {}\n".format(self.directory.toString(), number))
+
         # ------------------------------------- projectile -------------------------------------
 
     def compiler(self, command, tree_type):
@@ -201,7 +206,7 @@ class GUI(java.lang.Runnable):
                     self.files_list = self.tree_builder.files_list
                     self.project_warning('File ' + command_words[-1] + ' Updated---------------\n')
                 else:
-                    self.project_warning('Error Happend\n---------------\n')
+                    self.project_warning('Error Happend---------------\n')
 
             elif current_state == 4:
                 if command_words[1] == '-w':
@@ -240,7 +245,7 @@ class GUI(java.lang.Runnable):
             elif current_state == 10:
                 self.bufferizer(self.files_list)
                 print("success")
-                self.project_warning('\nNumber of listed Docs = ' + str(len(self.files_list)) + '\n---------------\n')
+                self.project_warning('\nNumber of listed Docs = ' + str(len(self.files_list)) + '---------------\n')
                 return True
             elif current_state == 11:
                 queue = []
@@ -249,7 +254,7 @@ class GUI(java.lang.Runnable):
                         if file.endswith('.txt'):
                             queue.append(file[:-4] + ' ')
                 self.bufferizer(queue)
-                self.project_warning('\nNumber of all Docs = ' + str(len(queue)) + '\n---------------\n')
+                self.project_warning('\nNumber of all Docs = ' + str(len(queue)) + '---------------\n')
                 return True
 
             elif current_state == 12:
@@ -261,7 +266,7 @@ class GUI(java.lang.Runnable):
                     if not second_quote.group(1) == '\"':
                         command_words[-1] = command_words[-1].replace('\"', '')
                 else:
-                    self.project_warning('Error Happend\n---------------\n')
+                    self.project_warning('Error Happend---------------\n')
 
                 if command_words[-1] is command_words[2]:
                     if not self.tree_builder.words_tree[command_words[-1]]:
@@ -294,29 +299,6 @@ class GUI(java.lang.Runnable):
                 self.project_warning('Error : Unkown Command\n')
                 return True
         return True
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def run(self):
         self.frame = JFrame(
@@ -427,7 +409,6 @@ class GUI(java.lang.Runnable):
         except Exception as err:
             print("khar")
             print(err)
-            raise Exception(err)
 
 
 if __name__ in ['__main__', 'main']:

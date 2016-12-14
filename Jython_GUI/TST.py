@@ -31,7 +31,7 @@ class TST:
             raise Exception("nothing to be contained!!!")
         return self[item] is not None
 
-    def __getitem__(self, item, get_doc=None):
+    def __getitem__(self, item, get_doc=None, trav=False):
         if item is None:
             raise Exception("call __getitem__ with None argument")
         if len(item) == 0:
@@ -39,10 +39,13 @@ class TST:
         x = self.get(self.root, item, 0)
         if x is None:
             return None
-        if get_doc is None:
+        if get_doc is None and trav is False:
             return x.value
-        else:
+
+        elif get_doc is not None:
             return x.doc_list
+        elif trav:
+            return x
 
     def intable(self, stream):
         try:
