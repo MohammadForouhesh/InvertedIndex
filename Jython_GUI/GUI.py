@@ -132,7 +132,6 @@ class GUI(java.lang.Runnable):
                     else:
 
                         self.tree_builder = TreeBuilder(tree_type, self.directory)
-                        self.wordTree = self.tree_builder.word_tree
                         self.files_list = self.tree_builder.files_list
                         ######################################################################################################################
                         self.project_warning('File' + name_of_file + 'Added\n---------------\n')
@@ -209,36 +208,40 @@ class GUI(java.lang.Runnable):
                 return True
             elif current_state == 9:
                 print(type(tree_type))
-                if type(tree_type) == TST:
+                if unicode(tree_type) == unicode('TST'):
                     print("success")
-                    self.wordTree.validation()
-                    for i in self.wordTree.traverse():
-                        self.write_result(i)
-                elif type(tree_type) == TrieST:
-                    self.wordTree.validation()
-                    for i in self.wordTree.traverse():
-                        self.write_result(i)
+                    self.tree_builder.words_tree.validation()
+                    for i in self.tree_builder.words_tree.traverse():
+                        #self.write_result(i)
+                        print(i)
 
-                elif type(tree_type) == BST:
-                    self.wordTree.traverse()
-                    for i in self.wordTree.content:
-                        self.write_result(i.key)
+                elif unicode(tree_type) == unicode('TrieST'):
+                    self.tree_builder.words_tree.validation()
+                    for i in self.tree_builder.words_tree.traverse():
+                        #self.write_result(i)
+                        print(i)
+
+                elif unicode(tree_type) == unicode('BST'):
+                    self.tree_builder.words_tree.traverse()
+                    for i in self.tree_builder.words_tree.content:
+                        #self.write_result(i.key)
+                        print(i)
 
                 return True
             elif current_state == 10:
                 for file in self.files_list:
-                    self.write_result(file + ' ')
+                    self.project_warning(file + ' ')
                     print("success")
-                    self.write_result('\nNumber of listed Docs = ' + str(len(self.files_list)) + '\n---------------\n')
+                    self.project_warning('\nNumber of listed Docs = ' + str(len(self.files_list)) + '\n---------------\n')
                 return True
             elif current_state == 11:
                 number_of_files = 0
                 for subdir, dirs, files in os.walk(self.directory.toString()):
                     for file in files:
                         if file.endswith('.txt'):
-                            self.write_result(file[:-4] + ' ')
+                            self.project_warning(file[:-4] + ' ')
                             number_of_files += 1
-                self.write_result('\nNumber of all Docs = ' + str(number_of_files) + '\n---------------\n')
+                self.project_warning('\nNumber of all Docs = ' + str(number_of_files) + '\n---------------\n')
                 return True
 
             elif current_state == 12:
@@ -260,10 +263,10 @@ class GUI(java.lang.Runnable):
                     ######################################################################################################################
 
                 if command_words[-1] is command_words[2]:
-                    if not self.wordTree[command_words[-1]]:
-                        self.write_result('\nAny word found !!!\n---------------\n')
+                    if not self.tree_builder.words_tree[command_words[-1]]:
+                        self.project_warning('\nAny word found !!!\n---------------\n')
                     else:
-                        self.write_result(self.wordTree[command_words[-1]].refrence.getAll())
+                        self.project_warning(self.tree_builder.words_tree[command_words[-1]].refrence.getAll())
                 current_state = 20  # <-- This live has to change -->
                 return True
             elif current_state == 13:
@@ -279,10 +282,10 @@ class GUI(java.lang.Runnable):
                     self.project_warning('Error Happend')
                     ######################################################################################################################
                 if command_words[-1] is command_words[2]:
-                    if not self.wordTree[command_words[-1]]:
-                        self.write_result('\nAny word found !!!\n')
+                    if not self.tree_builder.words_tree[command_words[-1]]:
+                        self.project_warning('\nAny word found !!!\n')
                     else:
-                        self.write_result(self.wordTree[command_words[-1]].refrence.getAll())
+                        self.project_warning(self.tree_builder.words_tree[command_words[-1]].refrence.getAll())
                 current_state = 20  # <-- This live has to change -->
                 return True
             else:
