@@ -46,7 +46,7 @@ class GUI(java.lang.Runnable):
         self.check_box = None
 
     def project_warning(self, txt):
-        self.area.append("\n" + txt + "\n")
+        self.area.append(txt + "\n")
 
     def projectile_pane(self, buffer_txt):
         i = 1
@@ -63,14 +63,12 @@ class GUI(java.lang.Runnable):
             i += 1
         self.area.append("\n")
 
-    def builder(self, tree_name):
-        self.tree_builder = TreeBuilder(tree_name, self.directory)
-        # ------------------------------------- projectile -------------------------------------
-        buffer_txt = LinkedQueue()
-        for txt in self.tree_builder.words_tree.traverse():
-            print(txt)
+    def bufferizer(self, iterable):
+        buffer_txt = None
+        for txt in iterable:
             if buffer_txt is None:
                 buffer_txt = LinkedQueue()
+        # ------------------------------------- projectile -------------------------------------
             buffer_txt.enqueue(txt)
             if len(buffer_txt) > 4:
                 self.projectile_pane(buffer_txt)
@@ -78,7 +76,12 @@ class GUI(java.lang.Runnable):
         self.area.append("-------------------------------- end ----\n")
         # ------------------------------------- projectile -------------------------------------
 
-
+    def builder(self, tree_name):
+        self.tree_builder = TreeBuilder(tree_name, self.directory)
+        self.files_list = self.tree_builder.files_list
+        # ------------------------------------- projectile -------------------------------------
+        self.bufferizer(self.tree_builder.words_tree.traverse())
+        # ------------------------------------- projectile -------------------------------------
 
     def compiler(self, command, tree_type):
         # self.command_editor = CommandLineCompiler(command, self.tree_builder.tree_type, self.tree_builder.words_tree)
@@ -211,21 +214,15 @@ class GUI(java.lang.Runnable):
                 if unicode(tree_type) == unicode('TST'):
                     print("success")
                     self.tree_builder.words_tree.validation()
-                    for i in self.tree_builder.words_tree.traverse():
-                        #self.write_result(i)
-                        print(i)
+                    self.bufferizer(self.tree_builder.words_tree.traverse())
 
                 elif unicode(tree_type) == unicode('TrieST'):
                     self.tree_builder.words_tree.validation()
-                    for i in self.tree_builder.words_tree.traverse():
-                        #self.write_result(i)
-                        print(i)
+                    self.bufferizer(self.tree_builder.words_tree.traverse())
 
                 elif unicode(tree_type) == unicode('BST'):
                     self.tree_builder.words_tree.traverse()
-                    for i in self.tree_builder.words_tree.content:
-                        #self.write_result(i.key)
-                        print(i)
+                    self.bufferizer(self.tree_builder.words_tree.content)
 
                 return True
             elif current_state == 10:
