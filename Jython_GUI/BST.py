@@ -10,6 +10,7 @@ class BST:
             self.right = None
             self.size = 1
             self.repetition = 1
+            self.doc_list = []
 
         # --------------------------------------------------------------------------------------
 
@@ -20,40 +21,48 @@ class BST:
 
         # --------------------------------------------------------------------------------------
 
-        def insert(self, key, NodeType):
+        def insert(self, key, NodeType, set_doc):
             self.size += 1
             if key < self.key:
                 if self.left is None:
                     self.left = NodeType(self, key)
+                    if set_doc is not None:
+                        self.doc_list.append(set_doc)
                     return self.left
                 else:
-                    return self.left.insert(key, NodeType)
+                    return self.left.insert(key, NodeType, set_doc)
             elif key == self.key:
                 self.repetition += 1
+                if set_doc is not None:
+                    self.doc_list.append(set_doc)
                 return
             else:
                 if self.right is None:
                     self.right = NodeType(self, key)
+                    if set_doc is not None:
+                        self.doc_list.append(set_doc)
                     return self.right
                 else:
-                    return self.right.insert(key, NodeType)
+                    return self.right.insert(key, NodeType, set_doc)
 
         # ---------------------------------------------------------------------------------------
 
-        def find(self, key):
+        def find(self, key, get_doc):
             """Return the node for key if it is in this tree, or None otherwise."""
             if key == self.key:
+                if get_doc is not None:
+                    return self.doc_list
                 return self
             elif key < self.key:
                 if self.left is None:
                     return None
                 else:
-                    return self.left.find(key)
+                    return self.left.find(key, get_doc)
             else:
                 if self.right is None:
                     return None
                 else:
-                    return self.right.find(key)
+                    return self.right.find(key, get_doc)
 
         # ----------------------------------------------------------------------------------------
 
@@ -152,7 +161,7 @@ class BST:
     def reroot(self):
         self.root = self.psroot.left
 
-    def insert(self, key):
+    def insert(self, key, set_doc):
         """Insert key into this BST, modifying it in-place."""
         if self.root is None:
             self.psroot.left = self.NodeType(self.psroot, key)
@@ -160,19 +169,19 @@ class BST:
             self.root.update_stats()
             return self.root
         else:
-            return self.root.insert(key, self.NodeType)
+            return self.root.insert(key, self.NodeType, set_doc)
 
     def add_doc(self, doc_name):
         self.docs.add_last(doc_name)
 
     # --------------------------------------------------------------------------------------------------
 
-    def find(self, key):
+    def __getitem__(self, key, get_doc=None):
         """Return the node for key if is in the tree, or None otherwise."""
         if self.root is None:
             return None
         else:
-            return self.root.find(key)
+            return self.root.find(key, get_doc)
 
     def rank(self, key):
         """The number of keys <= key in the tree."""

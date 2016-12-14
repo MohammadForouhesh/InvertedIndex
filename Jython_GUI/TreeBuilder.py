@@ -30,12 +30,12 @@ class TreeBuilder:
 
         i = 0
         for q in fileQueue:
-            self.stopwordsTST.put(str(q.element), i)
+            self.stopwordsTST.put(str(q.element), i, None)
             i += 1
         self.stopwordsTST.validation()
 
         for q in fileQueue:
-            self.stopwordsBST.insert(str(q.element))
+            self.stopwordsBST.insert(str(q.element), None)
 
         i = 0
         for q in fileQueue:
@@ -55,17 +55,16 @@ class TreeBuilder:
                 self.words_tree = TST()
                 counter = 0
                 for subdir, dirs, files in os.walk(directory_entered.toString()):
-                    for file in files:
-                        if file.endswith('.txt'):
-                            self.files_list.append(str(file))
-                            fp = open(os.path.join(subdir, file), 'r+')
+                    for _file in files:
+                        if _file.endswith('.txt'):
+                            self.files_list.append(str(_file))
+                            fp = open(os.path.join(subdir, _file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTST.keysWithPrefix(key)) == 0:
-                                    if len(self.words_tree.keysThatMatch(key)) == 0:
-                                        # self.words_tree.put(files[:-4])
-                                        self.words_tree.put(str(key), counter)
-                                        counter += 1
+                                    # if len(self.words_tree.keysThatMatch(key)) == 0:
+                                    self.words_tree.put(str(key), counter, _file)
+                                    counter += 1
 
                             fp.close()
 
@@ -89,14 +88,14 @@ class TreeBuilder:
                 print(type(self.words_tree))
 
                 for subdir, dirs, files in os.walk(directory_entered.toString()):
-                    for file in files:
-                        if file.endswith('.txt'):
-                            self.files_list.append((str(file)))
-                            fp = open(os.path.join(subdir, file), 'r+')
+                    for _file in files:
+                        if _file.endswith('.txt'):
+                            self.files_list.append((str(_file)))
+                            fp = open(os.path.join(subdir, _file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
-                                if self.stopwordsBST.find(key) is None:
-                                    self.words_tree.insert(str(key))
+                                if self.stopwordsBST[key] is None:
+                                    self.words_tree.insert(str(key), _file)
                             fp.close()
 
                 print(type(self.words_tree))

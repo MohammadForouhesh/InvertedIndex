@@ -12,6 +12,7 @@ class TST:
             self.left = None
             self.mid = None
             self.right = None
+            self.doc_list = []
             self.value = str()
 
     # -------------------------------------- end of inner class ------------------------------------------
@@ -30,7 +31,7 @@ class TST:
             raise Exception("nothing to be contained!!!")
         return self[item] is not None
 
-    def __getitem__(self, item):
+    def __getitem__(self, item, get_doc=None):
         if item is None:
             raise Exception("call __getitem__ with None argument")
         if len(item) == 0:
@@ -38,7 +39,10 @@ class TST:
         x = self.get(self.root, item, 0)
         if x is None:
             return None
-        return x.value
+        if get_doc is None:
+            return x.value
+        else:
+            return x.doc_list
 
     def intable(self, stream):
         try:
@@ -65,7 +69,7 @@ class TST:
         else:
             return x
 
-    def put(self, item, value):
+    def put(self, item, value, set_doc):
         """
         Inserts the key-value pair into the symbol table
         """
@@ -73,21 +77,24 @@ class TST:
             raise Exception("call __setitem__ with None argument")
         else:
             self.size += 1
-        self.root = self.set(self.root, item, value, 0)
+        self.root = self.set(self.root, item, value, 0, set_doc)
 
-    def set(self, x, item, value, d):
+    def set(self, x, item, value, d, set_doc):
         char = item[d]
         if x is None:
             x = TST.Node(char)
-            # self.size += 1
+
         if char < x.key_char:
-            x.left = self.set(x.left, item, value, d)
+            x.left = self.set(x.left, item, value, d, set_doc)
         elif char > x.key_char:
-            x.right = self.set(x.right, item, value, d)
+            x.right = self.set(x.right, item, value, d, set_doc)
         elif d < len(item) - 1:
-            x.mid = self.set(x.mid, item, value, d + 1)
+            x.mid = self.set(x.mid, item, value, d + 1, set_doc)
         else:
             x.value = value
+
+        x.doc_list.append(set_doc)
+
         return x
 
     def longestPrefixOf(self, query):

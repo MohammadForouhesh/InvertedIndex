@@ -33,7 +33,6 @@ class TrieST:
         if get_doc is None:
             return str(x.value)
         else:
-            print(x.doc_list)
             return x.doc_list
 
     def __contains__(self, key):
