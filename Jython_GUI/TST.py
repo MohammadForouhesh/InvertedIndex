@@ -92,9 +92,8 @@ class TST:
             x.mid = self.set(x.mid, item, value, d + 1, set_doc)
         else:
             x.value = value
-
+            
         x.doc_list.append(set_doc)
-
         return x
 
     def longestPrefixOf(self, query):
