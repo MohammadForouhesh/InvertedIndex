@@ -83,7 +83,6 @@ class GUI(java.lang.Runnable):
             temp_list.append("[*{}*] ".format(number) + str(word) + " *--->  ")
             for doc in self.tree_builder.words_tree.__getitem__(word, trav=True).doc_list:
                 if doc[:-4] not in temp_list:
-                    print(doc)
                     temp_list.append(doc[:-4])
             self.bufferizer(temp_list)
             number += 1
@@ -227,7 +226,6 @@ class GUI(java.lang.Runnable):
             elif current_state == 8:
                 return True
             elif current_state == 9:
-                print(type(tree_type))
                 if unicode(tree_type) == unicode('TST'):
                     print("success")
                     self.tree_builder.words_tree.validation()
@@ -382,7 +380,6 @@ class GUI(java.lang.Runnable):
         self.label.setText('%s selected? %s' % (text, state))
         if state == 'Yes':
             self.builder(text)
-            print(text)
 
     def showFC(self, event):
         Type = 'Open,Save,Custom'.split(',')

@@ -1,3 +1,7 @@
+import os
+
+import re
+
 from LinkedList import LinkedList
 from LinkedQueue import LinkedQueue
 
@@ -163,3 +167,47 @@ class TrieST:
                 return x
         return None
 
+
+if __name__ == '__main__':
+    trie = TrieST()
+    trieStp = TrieST()
+
+    fileQueue = LinkedQueue()
+    fp = open("StopWords.txt", '+r')
+    for line in fp.readlines():
+        key = (line.rstrip('\n'))
+        fileQueue.enqueue(key)
+    fp.close()
+    i = 0
+    for q in fileQueue:
+        trieStp.put(str(q.element), i, None)
+        i += 1
+    trieStp.validation()
+
+    counter = 0
+    for subdir, dirs, files in os.walk("/home/maometto/Documents/d/"):
+        for _file in files:
+            if _file.endswith('.txt'):
+                fp = open(os.path.join(subdir, _file), 'r+')
+                DATA = fp.read().replace('\n', ' ')
+                for key in re.findall(r"[\w']+", DATA):
+                    if len(trieStp.keysWithPrefix(key)) == 0:
+                        trie.put(str(key), counter, _file)
+                        counter += 1
+                fp.close()
+    trie.validation()
+    print(counter)
+
+
+
+    try :
+        for s in trie.keysThatMatch("afterward"):
+            print(s.element)
+    except Exception as err:
+        print(err)
+
+    print("-------------------------Test traverse and correct words")
+    for t in trie.traverse():
+        print(t)
+    print("-------------------------Number of valid words")
+    print(len(trie.valid_words))

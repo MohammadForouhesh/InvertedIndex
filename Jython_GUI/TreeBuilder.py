@@ -24,7 +24,7 @@ class TreeBuilder:
         fileQueue = LinkedQueue()
         fp = open("StopWords.txt", '+r')
         for line in fp.readlines():
-            key = (line.rstrip('\n'))
+            key = (line.rstrip('\r\n'))
             fileQueue.enqueue(key)
         fp.close()
 
@@ -61,8 +61,7 @@ class TreeBuilder:
                             fp = open(os.path.join(subdir, _file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
-                                if len(self.stopwordsTST.keysWithPrefix(key)) == 0:
-                                    # if len(self.words_tree.keysThatMatch(key)) == 0:
+                                if self.stopwordsTST[key] is None:
                                     self.words_tree.put(str(key), counter, _file)
                                     counter += 1
 
@@ -86,7 +85,8 @@ class TreeBuilder:
                 del self.words_tree
                 self.words_tree = BST()
                 print(type(self.words_tree))
-
+                for i in self.stopwordsBST.traverse():
+                    print(str(i), "    ", len(i))
                 for subdir, dirs, files in os.walk(directory_entered.toString()):
                     for _file in files:
                         if _file.endswith('.txt'):

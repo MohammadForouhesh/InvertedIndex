@@ -1,3 +1,7 @@
+import os
+
+import re
+
 from LinkedList import LinkedList
 from LinkedQueue import LinkedQueue
 
@@ -187,3 +191,51 @@ class TST:
     def validation(self):
         for v in self.traverse():
             self.valid_words.enqueue(v)
+
+
+
+if __name__ == '__main__':
+    tst = TST()
+    tstStp = TST()
+
+    fileQueue = LinkedQueue()
+
+    fp = open("StopWords.txt", '+r')
+    for line in fp.readlines():
+        key = (line.rstrip('\n'))
+        fileQueue.enqueue(key)
+    fp.close()
+
+    i = 0
+    for q in fileQueue:
+        tstStp.put(str(q.element), i, None)
+        i += 1
+    tstStp.validation()
+    counter = 0
+    for subdir, dirs, files in os.walk("/home/maometto/Documents/d"):
+        for file in files:
+            if file.endswith('.txt'):
+                fp = open(os.path.join(subdir, file), 'r+')
+                DATA = fp.read().replace('\n', ' ')
+                for key in re.findall(r"[\w']+", DATA):
+                    if len(tstStp.keysWithPrefix(key)) == 0:
+                        if tst.keysThatMatch(key) is not None:
+                            tst.put(str(key), counter, file)
+                            counter += 1
+
+                fp.close()
+
+    tst.validation()
+    print(counter)
+
+    print("-------------------------Test keysWithPrefix")
+    for q in tst.keysThatMatch("year"):
+        if tst[q.element] is not None:
+            print(q.element + "\t" + str(tst[q.element]))
+
+    i = 0
+    for t in tst.traverse():
+        print(t)
+        i += 1
+    print(i)
+

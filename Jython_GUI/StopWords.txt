@@ -1,3 +1,4 @@
+'s
 about
 above
 according
@@ -211,6 +212,7 @@ nothing
 notwithstanding
 now
 nowadays
+nt
 nowhere
 of
 off

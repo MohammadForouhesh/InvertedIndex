@@ -207,7 +207,7 @@ class BST:
             self._traverse(node=node.right)
 
     def delete(self, key):
-        node = self.find(key)
+        node = self[key]
         if node is None:
             raise Exception("nadari in klid ro")
         deleted = node.delete()
