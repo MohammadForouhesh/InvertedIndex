@@ -1,6 +1,9 @@
+import os
+
 import java
 
 # Jython swings library
+import re
 from java.awt import EventQueue
 from javax.swing import JSeparator
 from java.awt import BorderLayout
@@ -33,6 +36,7 @@ class GUI(java.lang.Runnable):
         self.resultText = str()
         self.cmd_compiler = None  # CommandLineCompiler()
         self.tree_builder = None  # TreeBuilder
+        self.files_list = []
         self.directory = None
         self.frame = None
         self.area = None
@@ -74,9 +78,219 @@ class GUI(java.lang.Runnable):
         self.area.append("-------------------------------- end ----\n")
         # ------------------------------------- projectile -------------------------------------
 
-    def compiler(self, command):
-        self.command_editor = CommandLineCompiler(command, self.tree_builder.tree_type, self.tree_builder.words_tree)
 
+
+    def compiler(self, command, tree_type):
+        # self.command_editor = CommandLineCompiler(command, self.tree_builder.tree_type, self.tree_builder.words_tree)
+        command_words = command.split()
+        current_state = 0
+        max_non_error_state = 15
+        i = 0
+        while i < len(command_words) and current_state < max_non_error_state:
+            if current_state == 0:
+                if command_words[0].lower() == 'add':
+                    current_state = 1
+                elif command_words[0].lower() == 'del':
+                    current_state = 2
+                elif command_words[0].lower() == 'update':
+                    current_state = 3
+                elif command_words[0].lower() == 'list':
+                    current_state = 4
+                elif command_words[0].lower() == 'search':
+                    current_state = 5
+                else:
+                    current_state = 14
+            elif current_state == 1:
+                first_quote = re.match(r'^"(.*)', command_words[1])
+                second_quote = re.match(r'(.*)"$', command_words[-1])
+                if first_quote and second_quote:
+                    if command_words[1] == '\"':
+                        del command_words[1]
+                    else:
+                        command_words[1] = command_words[1].replace('\"', '')
+                    if command_words[-1] == '\"':
+                        del command_words[-1]
+                    else:
+                        command_words[-1] = command_words[-1].replace('\"', '')
+                    name_of_file = ''
+                    for separate_word in command_words[1:]:
+                        name_of_file += separate_word
+                    file_exist = False
+                    for subdir, dirs, files in os.walk(self.directory.toString()):
+                        for file in files:
+                            if name_of_file in file:
+                                file_exist = True
+                    if [name_of_file_added for name_of_file_added in self.files_list \
+                        if name_of_file_added.documentName == len(name_of_file)] > 0:
+                        ######################################################################################################################
+                        self.project_warning('Error : Document already Exists!!!\n---------------\n')
+                        ######################################################################################################################
+                    elif not file_exist:
+                        ######################################################################################################################
+                        self.project_warning('Error : Document not Found!!!\n---------------\n')
+                        ######################################################################################################################
+                    else:
+
+                        self.tree_builder = TreeBuilder(tree_type, self.directory)
+                        self.wordTree = self.tree_builder.word_tree
+                        self.files_list = self.tree_builder.files_list
+                        ######################################################################################################################
+                        self.project_warning('File' + name_of_file + 'Added\n---------------\n')
+                        ######################################################################################################################
+                else:
+                    ######################################################################################################################
+                    self.project_warning('Error Happend')
+                    ######################################################################################################################
+                return True
+            elif current_state == 2:
+                first_quote = re.match(r'^"(.*)', command_words[1])
+                second_quote = re.match(r'(.*)"$', command_words[-1])
+                if first_quote and second_quote:
+                    if command_words[1] == '\"':
+                        del command_words[1]
+                    else:
+                        command_words[1] = command_words[1].replace('\"', '')
+                    if command_words[-1] == '\"':
+                        del command_words[-1]
+                    else:
+                        command_words[-1] = command_words[-1].replace('\"', '')
+                    name_of_file = ''
+                    for separate_word in command_words[1:]:
+                        name_of_file += separate_word
+                    file_name_found = False
+                    files_to_delete = [name_of_file_added for name_of_file_added in self.files_list if
+                                       name_of_file_added.documentName == name_of_file]
+                    for file_going_to_delete in files_to_delete:
+                        file_name_found = True
+                        file_going_to_delete.removeAll()
+                        self.files_list.remove(file_going_to_delete)
+                        del file_going_to_delete
+                        ######################################################################################################################
+                        self.project_warning('File ' + name_of_file + ' Deleted\n---------------\n')
+                        ######################################################################################################################
+                    if not file_name_found:
+                        self.project_warning('Error : Document not Found!!!\n---------------\n')
+                else:
+                    ######################################################################################################################
+                    self.project_warning('Error Happend\n---------------\n')
+                    ######################################################################################################################
+
+                return True
+            elif current_state == 3:
+                first_quote = re.match(r'^"(.*)', command_words[1])
+                second_quote = re.match(r'(.*)"$', command_words[-1])
+                if first_quote and second_quote:
+                    if not first_quote.group(1) == '\"':
+                        command_words[1] = command_words[1].replace('\"', '')
+                    if not second_quote.group(1) == '\"':
+                        command_words[-1] = command_words[-1].replace('\"', '')
+                else:
+                    ######################################################################################################################
+                    self.project_warning('Error Happend\n---------------\n')
+                    ######################################################################################################################
+                return True
+            elif current_state == 4:
+                if command_words[1] == '-w':
+                    current_state = 9
+                elif command_words[1] == '-l':
+                    current_state = 10
+                elif command_words[1] == '-f':
+                    current_state = 11
+            elif current_state == 5:
+                if command_words[1] == '-s':
+                    current_state = 12
+                elif command_words[1] == '-w':
+                    current_state = 13
+            elif current_state == 6:
+                return True
+            elif current_state == 7:
+                return True
+            elif current_state == 8:
+                return True
+            elif current_state == 9:
+                print(type(tree_type))
+                if type(tree_type) == TST:
+                    print("success")
+                    self.wordTree.validation()
+                    for i in self.wordTree.traverse():
+                        self.write_result(i)
+                elif type(tree_type) == TrieST:
+                    self.wordTree.validation()
+                    for i in self.wordTree.traverse():
+                        self.write_result(i)
+
+                elif type(tree_type) == BST:
+                    self.wordTree.traverse()
+                    for i in self.wordTree.content:
+                        self.write_result(i.key)
+
+                return True
+            elif current_state == 10:
+                for file in self.files_list:
+                    self.write_result(file + ' ')
+                    print("success")
+                    self.write_result('\nNumber of listed Docs = ' + str(len(self.files_list)) + '\n---------------\n')
+                return True
+            elif current_state == 11:
+                number_of_files = 0
+                for subdir, dirs, files in os.walk(self.directory.toString()):
+                    for file in files:
+                        if file.endswith('.txt'):
+                            self.write_result(file[:-4] + ' ')
+                            number_of_files += 1
+                self.write_result('\nNumber of all Docs = ' + str(number_of_files) + '\n---------------\n')
+                return True
+
+            elif current_state == 12:
+                first_quote = re.match(r'^"(.*)', command_words[2])
+                print('1')
+                second_quote = re.match(r'(.*)"$', command_words[-1])
+                print('2')
+                if first_quote and second_quote:
+                    print('3')
+                    if not first_quote.group(1) == '\"':
+                        command_words[2] = command_words[2].replace('\"', '')
+                    print('4')
+                    if not second_quote.group(1) == '\"':
+                        command_words[-1] = command_words[-1].replace('\"', '')
+                    print('5')
+                else:
+                    ######################################################################################################################
+                    self.project_warning('Error Happend\n---------------\n')
+                    ######################################################################################################################
+
+                if command_words[-1] is command_words[2]:
+                    if not self.wordTree[command_words[-1]]:
+                        self.write_result('\nAny word found !!!\n---------------\n')
+                    else:
+                        self.write_result(self.wordTree[command_words[-1]].refrence.getAll())
+                current_state = 20  # <-- This live has to change -->
+                return True
+            elif current_state == 13:
+                first_quote = re.match(r'^"(.*)', command_words[2])
+                second_quote = re.match(r'(.*)"$', command_words[-1])
+                if first_quote and second_quote:
+                    if not first_quote.group(1) == '\"':
+                        command_words[2] = command_words[2].replace('\"', '')
+                    if not second_quote.group(1) == '\"':
+                        command_words[-1] = command_words[-1].replace('\"', '')
+                else:
+                    ######################################################################################################################
+                    self.project_warning('Error Happend')
+                    ######################################################################################################################
+                if command_words[-1] is command_words[2]:
+                    if not self.wordTree[command_words[-1]]:
+                        self.write_result('\nAny word found !!!\n')
+                    else:
+                        self.write_result(self.wordTree[command_words[-1]].refrence.getAll())
+                current_state = 20  # <-- This live has to change -->
+                return True
+            else:
+                ######################################################################################################################
+                self.project_warning('Error : Unkown Command\n')
+                ######################################################################################################################
+                return True
+        return True
 
 
 
@@ -204,9 +418,11 @@ class GUI(java.lang.Runnable):
         value = event.getActionCommand()
         try:
             val = str(value)
-            self.compiler(val)
+            print(val)
+            self.compiler(val, self.tree_builder.tree_type)
 
         except Exception as err:
+            print("khar")
             print(err)
 
 
