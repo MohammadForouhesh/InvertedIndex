@@ -61,7 +61,7 @@ class TreeBuilder:
                             fp = open(os.path.join(subdir, _file), 'r+')
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
-                                if self.stopwordsTST[key] is None:
+                                if self.stopwordsTST[key] is None or len(self.stopwordsTST.keysWithPrefix(key)) != 1:
                                     self.words_tree.put(str(key), counter, _file)
                                     counter += 1
 

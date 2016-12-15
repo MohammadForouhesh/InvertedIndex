@@ -202,7 +202,7 @@ if __name__ == '__main__':
 
     fp = open("StopWords.txt", '+r')
     for line in fp.readlines():
-        key = (line.rstrip('\n'))
+        key = (line.rstrip('\n\r'))
         fileQueue.enqueue(key)
     fp.close()
 
@@ -218,12 +218,14 @@ if __name__ == '__main__':
                 fp = open(os.path.join(subdir, file), 'r+')
                 DATA = fp.read().replace('\n', ' ')
                 for key in re.findall(r"[\w']+", DATA):
-                    if len(tstStp.keysWithPrefix(key)) == 0:
-                        if tst.keysThatMatch(key) is not None:
-                            tst.put(str(key), counter, file)
-                            counter += 1
+                    if tstStp[key] == None or len(tstStp.keysWithPrefix(key)) != 1:
+                        tst.put(str(key), counter, file)
+                        counter += 1
 
                 fp.close()
+
+    for i in tst.keys():
+        print(i.element)
 
     tst.validation()
     print(counter)
