@@ -11,28 +11,19 @@ in middle of the project I decided to write the whole project in Jupyter noteboo
 
 ## Final Product
 after the backend of the project completed, I should begin to implement the Graphical user interface (GUI), first I started to learn basic of Tkinter layout manager, but after a day or two, I gave up and search for something like swing in python, so I found Jython (an extinct project !!!!!) unfortunately Jython just support python2.7, but that was not a bad news because python2.7 was my first programming language that I learned. I translate all of my code in python2.7 and start coding in Jython with Jython compiler. after a while a faced with some frightening exception like "instance error" or "null pointer exception" or "java.lang.Runnable exception". But fortunately I overcame them finally and the whole project survive. 
+        
+        
+###### dependencies:
+        
 
-### here are some screen shut of the project:
+`sudo apt-get install Jython`
 
+or 
 
+`sudo apt install jython`
 
+`sudo apt-get install anaconda3`
 
-## at the begining of the program
+`sudo apt-get install ipython-notebook`
 
-![title](https://github.com/MohammadForouhesh/InvertedIndex/blob/master/img/pic1.png)
-
-## building tree for TST
-
-![title](https://github.com/MohammadForouhesh/InvertedIndex/blob/master/img/pic2.png)
-
-## after command "list -w"
-
-![title](https://github.com/MohammadForouhesh/InvertedIndex/blob/master/img/pic4.png)
-
-## after command "list -f"
-
-![title](https://github.com/MohammadForouhesh/InvertedIndex/blob/master/img/pic5.png)
-
-## after command "search -w"
-
-![title](https://github.com/MohammadForouhesh/InvertedIndex/blob/master/img/pic6.png)
+`sudo apt-get install jupyter`
