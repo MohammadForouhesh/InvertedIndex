@@ -1,3 +1,4 @@
+
 import os
 
 import re
@@ -17,14 +18,14 @@ class TST:
             self.mid = None
             self.right = None
             self.doc_list = []
-            self.value = str()
+            self.value = int(-1)
 
     # -------------------------------------- end of inner class ------------------------------------------
 
     def __init__(self):
         self.root = TST.Node(" ")
         self.size = 0
-        self.valid_words = LinkedQueue()
+        self.valid_words = []
         self.docs = LinkedList()
 
     def __sizeof__(self):
@@ -55,8 +56,8 @@ class TST:
         try:
             integer = int(stream)
             return True, integer
-        except Exception as err:
-            return False, err
+        except Exception :
+            return False, Exception
 
     def get(self, x, item, d):
         """
@@ -84,7 +85,7 @@ class TST:
             raise Exception("call __setitem__ with None argument")
         else:
             self.size += 1
-        self.root = self.set(self.root, item, value, 0, set_doc)
+        self.root = self.set(self.root, item, int(value), 0, set_doc)
 
     def set(self, x, item, value, d, set_doc):
         char = item[d]
@@ -92,13 +93,13 @@ class TST:
             x = TST.Node(char)
 
         if char < x.key_char:
-            x.left = self.set(x.left, item, value, d, set_doc)
+            x.left = self.set(x.left, item, int(value), d, set_doc)
         elif char > x.key_char:
-            x.right = self.set(x.right, item, value, d, set_doc)
+            x.right = self.set(x.right, item, int(value), d, set_doc)
         elif d < len(item) - 1:
-            x.mid = self.set(x.mid, item, value, d + 1, set_doc)
+            x.mid = self.set(x.mid, item, int(value), d + 1, set_doc)
         else:
-            x.value = value
+            x.value = int(value)
 
         x.doc_list.append(set_doc)
         return x
@@ -151,7 +152,7 @@ class TST:
         if x.value is not None:
             queue.enqueue(str(prefix) + x.key_char)
         self.collect(x.mid, str(prefix) + str(x.key_char), queue)
-        prefix = prefix[:-1]
+        # prefix = prefix[:-1]
         self.collect(x.right, prefix, queue)
 
     def keysThatMatch(self, pattern):
@@ -185,12 +186,12 @@ class TST:
         if self.size == 0:
             raise Exception("empty tst can't be traversed")
         for q in self.keys():
-            if self[q.element] is not None and self[q.element] != "":
+            if self[q.element] is not None and self[q.element] != -1:
                 yield q.element
 
     def validation(self):
         for v in self.traverse():
-            self.valid_words.enqueue(v)
+            self.valid_words.append(v)
 
 
 
@@ -218,26 +219,18 @@ if __name__ == '__main__':
                 fp = open(os.path.join(subdir, file), 'r+')
                 DATA = fp.read().replace('\n', ' ')
                 for key in re.findall(r"[\w']+", DATA):
-                    if tstStp[key] == None or len(tstStp.keysWithPrefix(key)) != 1:
-                        tst.put(str(key), counter, file)
-                        counter += 1
+                    if len(tstStp.keysThatMatch(key)) == 0:
+                        if len(tst.keysThatMatch(key)) == 0:
+                            tst.put(str(key), counter, file)
+                            print(key , "====================son of the keys====================")
+                            counter += 1
 
                 fp.close()
-
-    for i in tst.keys():
-        print(i.element)
-
     tst.validation()
-    print(counter)
-
-    print("-------------------------Test keysWithPrefix")
-    for q in tst.keysThatMatch("year"):
-        if tst[q.element] is not None:
-            print(q.element + "\t" + str(tst[q.element]))
+    print(len(tst.valid_words), "=----------TST-----------=")
 
     i = 0
     for t in tst.traverse():
         print(t)
         i += 1
     print(i)
-

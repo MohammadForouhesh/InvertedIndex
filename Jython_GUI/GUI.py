@@ -3,6 +3,8 @@ import java
 
 # Jython swings library
 import re
+
+import sys
 from java.awt import EventQueue
 from javax.swing import JSeparator
 from java.awt import BorderLayout
@@ -19,6 +21,7 @@ from javax.swing import JFrame
 from javax.swing import JLabel
 
 # Inverted Index library
+
 from LinkedQueue import LinkedQueue
 from TreeBuilder import TreeBuilder
 
@@ -40,7 +43,7 @@ class GUI(java.lang.Runnable):
     def project_warning(self, txt):
         self.area.append(txt + "\n")
 
-    def projectile_pane(self, buffer_txt):
+    def projectile_pane(self, buffer_txt, seprator=" "):
         i = 1
         for text in buffer_txt:
             if i == len(buffer_txt):
@@ -48,22 +51,22 @@ class GUI(java.lang.Runnable):
                 continue
             string = " " + text.element
             if len(string) < 13:
-                string += ", "
+                string += seprator
             else:
                 string += " "
             self.area.append("{}".format(string))
             i += 1
         self.area.append("\n")
 
-    def bufferizer(self, iterable):
+    def bufferizer(self, iterable, length=10, seprator=" "):
         buffer_txt = None
         for txt in iterable:
             if buffer_txt is None:
                 buffer_txt = LinkedQueue()
         # ------------------------------------- projectile -------------------------------------
             buffer_txt.enqueue(txt)
-            if len(buffer_txt) > 10:
-                self.projectile_pane(buffer_txt)
+            if len(buffer_txt) > length:
+                self.projectile_pane(buffer_txt, seprator=seprator)
                 buffer_txt = None
 
         if buffer_txt is not None:
@@ -229,15 +232,15 @@ class GUI(java.lang.Runnable):
                 if unicode(tree_type) == unicode('TST'):
                     print("success")
                     self.tree_builder.words_tree.validation()
-                    self.bufferizer(self.tree_builder.words_tree.traverse())
+                    self.bufferizer(self.tree_builder.words_tree.traverse(), length=5, seprator="\t")
 
                 elif unicode(tree_type) == unicode('TrieST'):
                     self.tree_builder.words_tree.validation()
-                    self.bufferizer(self.tree_builder.words_tree.traverse())
+                    self.bufferizer(self.tree_builder.words_tree.traverse(), length=5, seprator="\t")
 
                 elif unicode(tree_type) == unicode('BST'):
                     self.tree_builder.words_tree.traverse()
-                    self.bufferizer(self.tree_builder.words_tree.content)
+                    self.bufferizer(self.tree_builder.words_tree.content, length=5, seprator="\t")
 
                 return True
             elif current_state == 10:
@@ -312,6 +315,23 @@ class GUI(java.lang.Runnable):
             actionPerformed=self.showFC
         )
 
+        reset_button = JButton(
+            "Reset",
+            font=("Comic Sans MS", 30, 30),
+            actionPerformed=self.reset
+        )
+
+        exit_button = JButton(
+            "Exit",
+            font=("Comic Sans MS", 30, 30),
+            actionPerformed=self.exit
+        )
+
+        panel_button = JPanel()
+        panel_button.setLayout(FlowLayout())
+        panel_button.add(reset_button)
+        panel_button.add(exit_button)
+
         self.area = JTextArea(
             font=("Comic Sans MS", 30, 30),
             editable=False,
@@ -324,7 +344,7 @@ class GUI(java.lang.Runnable):
             actionPerformed=self.update
         )
 
-        panel = [None] * 7
+        panel = [None] * 8
         panel[0] = JPanel()
         panel[0].setLayout(BorderLayout())
         panel[0].add(self.chooser)
@@ -343,12 +363,16 @@ class GUI(java.lang.Runnable):
         self.addCB(cp, 'TST')
         self.addCB(cp, 'BST')
         self.addCB(cp, 'TrieST')
+
         panel[5] = JPanel()
         panel[5].setLayout(FlowLayout())
-        panel[5].add(JLabel(text="powered by", font=("Comic Sans MS", 20, 20)))
+        panel[5].add(panel_button)
         panel[6] = JPanel()
         panel[6].setLayout(FlowLayout())
-        panel[6].add(JLabel(text="Mohammad Hossein Forouhesh Tehrani", font=("Comic Sans MS", 30, 30)))
+        panel[6].add(JLabel(text="powered by", font=("Comic Sans MS", 20, 20)))
+        panel[7] = JPanel()
+        panel[7].setLayout(FlowLayout())
+        panel[7].add(JLabel(text="Mohammad Hossein Forouhesh Tehrani", font=("Comic Sans MS", 30, 30)))
 
         box = Box.createVerticalBox()
         for pan in panel:
@@ -381,6 +405,12 @@ class GUI(java.lang.Runnable):
         if state == 'Yes':
             self.builder(text)
 
+    def reset(self, event):
+        self.area.setText("")
+
+    def exit(self, event):
+        sys.exit("exit Inverted Index")
+
     def showFC(self, event):
         Type = 'Open,Save,Custom'.split(',')
         Answer = 'Error,Approve,Cancel'.split(',')
@@ -403,9 +433,9 @@ class GUI(java.lang.Runnable):
             print(val)
             self.compiler(val, self.tree_builder.tree_type)
 
-        except Exception as err:
+        except Exception:
             print("khar")
-            print(err)
+            print(Exception)
 
 
 if __name__ in ['__main__', 'main']:

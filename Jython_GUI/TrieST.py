@@ -169,6 +169,7 @@ class TrieST:
 
 
 if __name__ == '__main__':
+
     trie = TrieST()
     trieStp = TrieST()
 
@@ -192,22 +193,11 @@ if __name__ == '__main__':
                 DATA = fp.read().replace('\n', ' ')
                 for key in re.findall(r"[\w']+", DATA):
                     if len(trieStp.keysWithPrefix(key)) == 0:
-                        trie.put(str(key), counter, _file)
-                        counter += 1
+                        if len(trie.keysThatMatch(key)) == 0:
+                            trie.put(str(key), counter, _file)
+                            counter += 1
                 fp.close()
     trie.validation()
-    print(counter)
-
-
-
-    try :
-        for s in trie.keysThatMatch("afterward"):
-            print(s.element)
-    except Exception as err:
-        print(err)
-
-    print("-------------------------Test traverse and correct words")
-    for t in trie.traverse():
-        print(t)
     print("-------------------------Number of valid words")
-    print(len(trie.valid_words))
+    print(len(trie.valid_words), "=----------TrieST-----------=")
+
