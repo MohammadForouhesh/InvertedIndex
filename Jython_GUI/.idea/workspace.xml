@@ -24,7 +24,7 @@
     <SUITE FILE_PATH="coverage/Jython_GUI$BST.coverage" NAME="BST Coverage Results" MODIFIED="1481757479010" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/InvertedIndex_JythonGUI$Editor.coverage" NAME="Editor Coverage Results" MODIFIED="1481636418930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GUI" />
     <SUITE FILE_PATH="coverage/Jython_GUI$TrieST.coverage" NAME="TrieST Coverage Results" MODIFIED="1481909282315" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Jython_GUI$GUI__1_.coverage" NAME="GUI (1) Coverage Results" MODIFIED="1481909582821" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Jython_GUI$GUI__1_.coverage" NAME="GUI (1) Coverage Results" MODIFIED="1481913323124" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -35,11 +35,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file leaf-file-name="GUI.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GUI.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GUI.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2015">
-              <caret line="262" column="69" selection-start-line="262" selection-start-column="69" selection-end-line="262" selection-end-column="69" />
+            <state relative-caret-position="541">
+              <caret line="55" column="30" selection-start-line="55" selection-start-column="30" selection-end-line="55" selection-end-column="30" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -50,8 +50,8 @@
       <file leaf-file-name="TreeBuilder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TreeBuilder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1512">
-              <caret line="65" column="84" selection-start-line="65" selection-start-column="84" selection-end-line="65" selection-end-column="84" />
+            <state relative-caret-position="2460">
+              <caret line="121" column="36" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -60,8 +60,8 @@
       <file leaf-file-name="TrieST.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TrieST.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="757">
-              <caret line="195" column="24" selection-start-line="195" selection-start-column="24" selection-end-line="196" selection-end-column="62" />
+            <state relative-caret-position="1393">
+              <caret line="196" column="24" selection-start-line="196" selection-start-column="24" selection-end-line="196" selection-end-column="24" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -69,10 +69,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TST.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TST.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/TST.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
+            <state relative-caret-position="3300">
               <caret line="221" column="20" selection-start-line="221" selection-start-column="20" selection-end-line="223" selection-end-column="60" />
               <folding>
                 <element signature="e#1#10#0" expanded="true" />
@@ -120,10 +120,10 @@
         <option value="$PROJECT_DIR$/LinkedList.py" />
         <option value="$PROJECT_DIR$/StringLinked.py" />
         <option value="$PROJECT_DIR$/BST.py" />
-        <option value="$PROJECT_DIR$/GUI.py" />
-        <option value="$PROJECT_DIR$/TrieST.py" />
         <option value="$PROJECT_DIR$/TST.py" />
+        <option value="$PROJECT_DIR$/TrieST.py" />
         <option value="$PROJECT_DIR$/TreeBuilder.py" />
+        <option value="$PROJECT_DIR$/GUI.py" />
       </list>
     </option>
   </component>
@@ -552,7 +552,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="48" width="3840" height="2112" extended-state="6" />
+    <frame x="0" y="48" width="3840" height="2112" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15991472" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
@@ -799,20 +799,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TST.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="221" column="20" selection-start-line="221" selection-start-column="20" selection-end-line="223" selection-end-column="60" />
-          <folding>
-            <element signature="e#1#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TrieST.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="757">
-          <caret line="195" column="24" selection-start-line="195" selection-start-column="24" selection-end-line="196" selection-end-column="62" />
+        <state relative-caret-position="1393">
+          <caret line="196" column="24" selection-start-line="196" selection-start-column="24" selection-end-line="196" selection-end-column="24" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -821,18 +811,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/TreeBuilder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1512">
-          <caret line="65" column="84" selection-start-line="65" selection-start-column="84" selection-end-line="65" selection-end-column="84" />
+        <state relative-caret-position="2460">
+          <caret line="121" column="36" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GUI.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2015">
-          <caret line="262" column="69" selection-start-line="262" selection-start-column="69" selection-end-line="262" selection-end-column="69" />
+        <state relative-caret-position="541">
+          <caret line="55" column="30" selection-start-line="55" selection-start-column="30" selection-end-line="55" selection-end-column="30" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TST.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3300">
+          <caret line="221" column="20" selection-start-line="221" selection-start-column="20" selection-end-line="223" selection-end-column="60" />
+          <folding>
+            <element signature="e#1#10#0" expanded="true" />
           </folding>
         </state>
       </provider>

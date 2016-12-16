@@ -62,9 +62,9 @@ class TreeBuilder:
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTST.keysThatMatch(key)) == 0:
-                                    if len(self.words_tree.keysThatMatch(key)) == 0:
-                                        self.words_tree.put(str(key), counter, _file)
-                                        counter += 1
+                                    # if len(self.words_tree.keysThatMatch(key)) == 0:
+                                    self.words_tree.put(str(key), counter, _file)
+                                    counter += 1
 
                             fp.close()
 
@@ -117,9 +117,9 @@ class TreeBuilder:
                             DATA = fp.read().replace('\n', ' ')
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTrie.keysWithPrefix(key)) == 0:
-                                    if len(self.words_tree.keysThatMatch(key)) == 0:
-                                        self.words_tree.put(str(key), counter, _file)
-                                        counter += 1
+                                    # if len(self.words_tree.keysThatMatch(key)) == 0:
+                                    self.words_tree.put(str(key), counter, _file)
+                                    counter += 1
                             fp.close()
                 self.words_tree.validation()
 

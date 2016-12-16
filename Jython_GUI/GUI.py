@@ -43,7 +43,7 @@ class GUI(java.lang.Runnable):
     def project_warning(self, txt):
         self.area.append(txt + "\n")
 
-    def projectile_pane(self, buffer_txt, seprator=" "):
+    def projectile_pane(self, buffer_txt, seprator=", "):
         i = 1
         for text in buffer_txt:
             if i == len(buffer_txt):
@@ -53,12 +53,12 @@ class GUI(java.lang.Runnable):
             if len(string) < 13:
                 string += seprator
             else:
-                string += " "
+                string += " \n"
             self.area.append("{}".format(string))
             i += 1
         self.area.append("\n")
 
-    def bufferizer(self, iterable, length=10, seprator=" "):
+    def bufferizer(self, iterable, length=10, seprator=", "):
         buffer_txt = None
         for txt in iterable:
             if buffer_txt is None:
@@ -70,7 +70,7 @@ class GUI(java.lang.Runnable):
                 buffer_txt = None
 
         if buffer_txt is not None:
-            self.projectile_pane(buffer_txt)
+            self.projectile_pane(buffer_txt, seprator=seprator)
 
         self.area.append("--------------------------------------------------------------------------\n")
         # ------------------------------------- projectile -------------------------------------
@@ -244,7 +244,7 @@ class GUI(java.lang.Runnable):
 
                 return True
             elif current_state == 10:
-                self.bufferizer(self.files_list)
+                self.bufferizer(self.files_list, length=5, seprator="\t")
                 print("success")
                 self.project_warning('\nNumber of listed Docs = ' + str(len(self.files_list)) + '---------------\n')
                 return True
@@ -254,7 +254,7 @@ class GUI(java.lang.Runnable):
                     for file in files:
                         if file.endswith('.txt'):
                             queue.append(file[:-4] + ' ')
-                self.bufferizer(queue)
+                self.bufferizer(queue, length=5, seprator="\t")
                 self.project_warning('\nNumber of all Docs = ' + str(len(queue)) + '---------------\n')
                 return True
 
@@ -273,10 +273,10 @@ class GUI(java.lang.Runnable):
                     if not self.tree_builder.words_tree[command_words[-1]]:
                         self.project_warning("\nThere is no such phrase !!!\n")
                     else:
-                        self.bufferizer(self.tree_builder.words_tree.__getitem__(command_words[-1], get_doc=True))
+                        self.bufferizer(self.tree_builder.words_tree.__getitem__(command_words[-1], get_doc=True), length=5, seprator="\t")
                 for word in command_words[2:]:
                     if self.tree_builder.stopwordsTrie[word] is None and self.tree_builder.words_tree[word] is not None:
-                        self.bufferizer(self.tree_builder.words_tree.__getitem__(word, get_doc=True))
+                        self.bufferizer(self.tree_builder.words_tree.__getitem__(word, get_doc=True), length=5, seprator="\t")
                 self.project_warning('---------------\n')
                 return True
             elif current_state == 13:
@@ -294,7 +294,10 @@ class GUI(java.lang.Runnable):
                         self.project_warning("\nThere is no such word !!!\n")
                     else:
                         print(self.tree_builder.words_tree.__getitem__(command_words[-1], get_doc=True))
-                        self.bufferizer(self.tree_builder.words_tree.__getitem__(command_words[-1], get_doc=True))
+                        itr = list()
+                        itr.append("[*{search}*] " + str(command_words[-1]) + " *--->  ")
+                        itr.extend(self.tree_builder.words_tree.__getitem__(command_words[-1], get_doc=True))
+                        self.bufferizer(itr, length=4, seprator="\t")
                 return True
             else:
                 self.project_warning('Error : Unkown Command\n')

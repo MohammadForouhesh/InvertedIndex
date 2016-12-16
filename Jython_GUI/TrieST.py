@@ -193,9 +193,8 @@ if __name__ == '__main__':
                 DATA = fp.read().replace('\n', ' ')
                 for key in re.findall(r"[\w']+", DATA):
                     if len(trieStp.keysWithPrefix(key)) == 0:
-                        if len(trie.keysThatMatch(key)) == 0:
-                            trie.put(str(key), counter, _file)
-                            counter += 1
+                        trie.put(str(key), counter, _file)
+                        counter += 1
                 fp.close()
     trie.validation()
     print("-------------------------Number of valid words")
