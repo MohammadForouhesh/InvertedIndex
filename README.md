@@ -18,12 +18,12 @@
 
 
 ### dependencies:
-    to run the project you need jython compiler, you can install this via this command:
+to run the project you need jython compiler, you can install this via this command:
 
     `sudo apt-get install Jython`
 
 
-    to open jupyter notebook you should donwload this packages:
+to open jupyter notebook you should donwload this packages:
 
 
     `sudo apt-get install anaconda3`
@@ -32,28 +32,6 @@
 
     `sudo apt-get install jupyter`
 
-
-
-## here are some screenshoots of the project:
-#### describtion: 
-    this window will open when you run the program.
-##### ![at the begining of the program](img/pic11.png)
-
-#### describtion: 
-    when you hit the TST checkbox after a while, this will be shown to you.
-##### ![building tree for TST](img/pic22.png)
-
-#### describtion: 
-    you may want just your words.
-##### ![after command "list -w"](img/pic44.png)
-
-#### describtion: 
-    with this command you can see the files in the directory.
-##### ![after command "list -f"](img/pic55.png)
-
-#### describtion: 
-    you can search the words.
-##### ![after command "search -w"](img/pic66.png)
 
 
 
