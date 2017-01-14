@@ -192,6 +192,7 @@ class BST:
             return self.root.rank(key)
 
     def traverse(self):
+        self.content.__delslice__(0, len(self.content))
         self._traverse()
         for i in self.content:
             yield i

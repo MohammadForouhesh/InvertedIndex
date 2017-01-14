@@ -44,6 +44,8 @@ class TreeBuilder:
         self.stopwordsTrie.validation()
 
     def _build(self, directory_entered):
+        debug = list()
+        debug1 = list()
         if True:  # os.path.isdir(directory_entered.get()):
             if unicode(self.tree_type) == unicode('TST'):
                 print("----------------------------------------")
@@ -72,9 +74,18 @@ class TreeBuilder:
 
                 print("--------------------------Test traverse and correct words")
                 i = 0
+                output = open("reverse_tst.txt", "w")
                 for t in self.words_tree.traverse():
-                    print(t)
-                    i += 1
+                    debug.append(t)
+
+
+                    i+=1
+                debug.sort()
+                for l in debug:
+                    output.write(l)
+                    output.write('\n')
+
+                output.close()
                 print(i)
 
             elif unicode(self.tree_type) == unicode('BST'):
@@ -85,9 +96,6 @@ class TreeBuilder:
                 # BST Search
                 del self.words_tree
                 self.words_tree = BST()
-                print(type(self.words_tree))
-                for i in self.stopwordsBST.traverse():
-                    print(str(i), "    ", len(i))
                 for subdir, dirs, files in os.walk(directory_entered.toString()):
                     for _file in files:
                         if _file.endswith('.txt'):
@@ -100,6 +108,19 @@ class TreeBuilder:
                             fp.close()
 
                 print(type(self.words_tree))
+                print("--------------------------Test traverse and correct words")
+                i = 0
+                output = open("reverse_bst.txt", "w")
+                for t in self.words_tree.traverse():
+                    debug1.append(t)
+                    i += 1
+                debug1.sort()
+
+                for l in debug1:
+                    output.write(l)
+                    output.write('\n')
+                output.close()
+                print(i)
 
             elif unicode(self.tree_type) == unicode('TrieST'):
                 print("----------------------------------------")
