@@ -62,6 +62,10 @@ class SCHashST(MutableMapping):
         return bucket[key]
 
     def _bucket_setitem(self, j, key, value):
+        for i in self:
+            if value == self[i]:
+                return
+        
         if self._table[j] is None:
             self._table[j] = UnsortedTableMap()
         oldsize = len(self._table[j])
@@ -78,7 +82,7 @@ class SCHashST(MutableMapping):
     def __iter__(self):
         for bucket in self._table:
             if bucket is not None:
-                for key in bucket:
+                for key in bucket:          # chaining
                     yield key
 
 
@@ -146,9 +150,18 @@ if __name__ == '__main__':
                 for key in re.findall(r"[\w']+", DATA):
                     # if len(self.stopwordsTrie.keysWithPrefix(key)) == 0:
                         # if len(self.words_tree.keysThatMatch(key)) == 0:
-                    words_tree.__setitem__(counter, key)
+                    words_tree[counter] = key
                     counter += 1
                 fp.close()
 
+    print(counter)
+    val = 'state'
+
+    for i in words_tree:
+        if val == words_tree[i]:
+            print(True)
+
     for i in words_tree:
         print words_tree[i]
+
+    print(len(words_tree))
