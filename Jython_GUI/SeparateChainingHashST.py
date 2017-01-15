@@ -1,6 +1,8 @@
 from collections import MutableMapping
 from random import randrange
 
+from LinkedQueue import LinkedQueue
+
 
 class SCHashST(MutableMapping):
     """Hash map implemented with separate chaining for collision resolution."""
@@ -37,6 +39,12 @@ class SCHashST(MutableMapping):
         j = self._hash_function(key)
         return self._bucket_getitem(j, key)
 
+    def __contains__(self, val):
+        for i in self:
+            if val == self[i]:
+                return True
+        return False
+
     def __setitem__(self, key, value):
         j = self._hash_function(key)
         self._bucket_setitem(j, key, value)
@@ -62,9 +70,8 @@ class SCHashST(MutableMapping):
         return bucket[key]
 
     def _bucket_setitem(self, j, key, value):
-        for i in self:
-            if value == self[i]:
-                return
+        if value in self:
+            return
 
         if self._table[j] is None:
             self._table[j] = UnsortedTableMap()
@@ -135,6 +142,20 @@ class UnsortedTableMap(MutableMapping):
 
 if __name__ == '__main__':
     import os, re
+    stopwordsSCHashST = SCHashST()
+    fileQueue = LinkedQueue()
+
+    fp = open("StopWords.txt", '+r')
+    for line in fp.readlines():
+        key = (line.rstrip('\r\n'))
+        fileQueue.enqueue(key)
+    fp.close()
+
+    i = 0
+    for q in fileQueue:
+        stopwordsSCHashST[i] = q.element
+        i += 1
+
     print("----------------------------------------")
     print("SCHashST")
     print("----------------------------------------")
@@ -147,11 +168,10 @@ if __name__ == '__main__':
                 #self.files_list.append((str(_file)))
                 fp = open(os.path.join(subdir, _file), 'r+')
                 DATA = fp.read().replace('\n', ' ')
-                for key in re.findall(r"[\w']+", DATA):
-                    # if len(self.stopwordsTrie.keysWithPrefix(key)) == 0:
-                        # if len(self.words_tree.keysThatMatch(key)) == 0:
-                    words_tree[counter] = key
-                    counter += 1
+                for value in re.findall(r"[\w']+", DATA):
+                    if value not in stopwordsSCHashST:
+                        words_tree[counter] = value
+                        counter += 1
                 fp.close()
 
     print(counter)
