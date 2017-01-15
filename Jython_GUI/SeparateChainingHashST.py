@@ -65,7 +65,7 @@ class SCHashST(MutableMapping):
         for i in self:
             if value == self[i]:
                 return
-        
+
         if self._table[j] is None:
             self._table[j] = UnsortedTableMap()
         oldsize = len(self._table[j])
@@ -155,11 +155,6 @@ if __name__ == '__main__':
                 fp.close()
 
     print(counter)
-    val = 'state'
-
-    for i in words_tree:
-        if val == words_tree[i]:
-            print(True)
 
     for i in words_tree:
         print words_tree[i]
