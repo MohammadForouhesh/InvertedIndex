@@ -366,6 +366,7 @@ class GUI(java.lang.Runnable):
         self.addCB(cp, 'TST')
         self.addCB(cp, 'BST')
         self.addCB(cp, 'TrieST')
+        self.addCB(cp, 'ScHashST')
 
         panel[5] = JPanel()
         panel[5].setLayout(FlowLayout())

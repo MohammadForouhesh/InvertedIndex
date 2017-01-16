@@ -155,18 +155,18 @@ class TreeBuilder:
             print("----------------------------------------")
             print("SCHashST")
             print("----------------------------------------")
-            # Trie Search
-            self.words_tree = SCHashST()
+
+            words_tree = SCHashST()
             counter = 0
-            for subdir, dirs, files in os.walk("/home/maometto/Documents/black"):
+            for subdir, dirs, files in os.walk(directory_entered.toString()):
                 for _file in files:
                     if _file.endswith('.txt'):
-                        # self.files_list.append((str(_file)))
+                        self.files_list.append((str(_file)))
                         fp = open(os.path.join(subdir, _file), 'r+')
                         DATA = fp.read().replace('\n', ' ')
                         for value in re.findall(r"[\w']+", DATA):
                             if value not in self.stopwordsSCHashST:
-                                self.words_tree[counter] = value
+                                words_tree.put(counter, value, _file)
                                 counter += 1
                         fp.close()
 
