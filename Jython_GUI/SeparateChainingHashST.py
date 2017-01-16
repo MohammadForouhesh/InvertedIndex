@@ -2,7 +2,6 @@ from collections import MutableMapping
 from random import randrange
 
 from UnsortedTable import UnsortedTableMap
-from LinkedListChaining import ChaningLinkedList
 from LinkedQueue import LinkedQueue
 
 
@@ -81,13 +80,17 @@ class SCHashST(MutableMapping):
             raise KeyError('Key Error: ' + repr(key))
         return bucket.__getitem__(key, get_doc=get_doc)
 
-    def _bucket_setitem(self, j, key, value, set_doc): # j = hash code
+    def _bucket_setitem(self, j, key, value, set_doc):              # j = hash code
         if value in self:
+            for (k, v, d) in self.items():
+                if d != set_doc and value == v:
+                    self.__getitem__(k, get_doc=True).doc_list.append(set_doc)
             return
+
         if self._table[j] is None:
             self._table[j] = UnsortedTableMap()
         oldsize = len(self._table[j])
-        self._table[j].__setitem__(key, value, set_doc)
+        self._table[j].__setitem__(key, value, set_doc=set_doc)
         if len(self._table[j]) > oldsize:
             self._n += 1
 
