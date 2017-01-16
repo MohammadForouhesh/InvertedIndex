@@ -1,17 +1,20 @@
 from collections import MutableMapping
 from random import randrange
 
+from UnsortedTable import UnsortedTableMap
+from LinkedListChaining import ChaningLinkedList
 from LinkedQueue import LinkedQueue
 
 
 class SCHashST(MutableMapping):
-    """Hash map implemented with separate chaining for collision resolution."""
+    """Hash map implemented with separate chaining for collision resolution.
     class _Item:
-        """store key-value pairs."""
+        \"""store key-value pairs.\"""
 
         def __init__(self, k, v):
             self._key = k
             self._value = v
+            self.doc_list = list()
 
         def __eq__(self, other):
             return self._key == other._key
@@ -20,8 +23,8 @@ class SCHashST(MutableMapping):
             return not (self == other)
 
         def __lt__(self, other):
-            return self._key < other._key                   # compare items based on their keys
-
+            return self._key < other._key
+"""
     def __init__(self, cap=11, p=109345121):
         self._table = cap * [None]
         self._n = 0
@@ -35,9 +38,9 @@ class SCHashST(MutableMapping):
     def __len__(self):
         return self._n
 
-    def __getitem__(self, key):
+    def __getitem__(self, key, get_doc=False):
         j = self._hash_function(key)
-        return self._bucket_getitem(j, key)
+        return self._bucket_getitem(j, key, get_doc=get_doc)
 
     def __contains__(self, val):
         for i in self:
@@ -45,11 +48,11 @@ class SCHashST(MutableMapping):
                 return True
         return False
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value, set_doc=None):
         j = self._hash_function(key)
-        self._bucket_setitem(j, key, value)
+        self._bucket_setitem(j, key, value, set_doc=set_doc)
         if self._n > len(self._table) // 2:                     # keep load factor <= 0.5
-            self._resize(2 * len(self._table) - 1)              # number 2^x - 1 is often prime
+            self._resize(2 * len(self._table) - 1)              # number 2^x - 1 is often prime by Fermat theoriem
 
     def __delitem__(self, key):
         j = self._hash_function(key)
@@ -63,20 +66,20 @@ class SCHashST(MutableMapping):
         for (k, v) in old:
             self[k] = v
 
-    def _bucket_getitem(self, j, key):
+    def _bucket_getitem(self, j, key, get_doc=False):
         bucket = self._table[j]
         if bucket is None:
             raise KeyError('Key Error: ' + repr(key))
-        return bucket[key]
+        return bucket.__getitem__(key, get_doc=get_doc)
 
-    def _bucket_setitem(self, j, key, value):
+    def _bucket_setitem(self, j, key, value, set_doc=None):
         if value in self:
             return
 
         if self._table[j] is None:
             self._table[j] = UnsortedTableMap()
         oldsize = len(self._table[j])
-        self._table[j][key] = value
+        self._table[j].__setitem__(key, value, set_doc=set_doc)
         if len(self._table[j]) > oldsize:
             self._n += 1
 
@@ -89,55 +92,8 @@ class SCHashST(MutableMapping):
     def __iter__(self):
         for bucket in self._table:
             if bucket is not None:
-                for key in bucket:          # chaining
+                for key in bucket:                                 # chaining
                     yield key
-
-
-class UnsortedTableMap(MutableMapping):
-    class _Item:
-        """store key-value pairs."""
-        def __init__(self, k, v):
-            self._key = k
-            self._value = v
-
-        def __eq__(self, other):
-            return self._key == other._key
-
-        def __ne__(self, other):
-            return not (self == other)
-
-        def __lt__(self, other):
-            return self._key < other._key  # compare items based on their keys
-
-    def __init__(self):
-        self._table = []
-
-    def __getitem__(self, k):
-        for item in self._table:
-            if k == item._key:
-                return item._value
-        raise KeyError('Key Error: ' + repr(k))
-
-    def __setitem__(self, key, value):
-        for item in self._table:
-            if key == item._key:
-                item._value = value
-                return
-        self._table.append(self._Item(key, value))
-
-    def __delitem__(self, key):
-        for j in range(len(self._table)):
-            if key == self._table[j]._key:
-                self._table.pop(j)
-                return  # and quit
-        raise KeyError('Key Error: ' + repr(key))
-
-    def __len__(self):
-        return len(self._table)
-
-    def __iter__(self):
-        for item in self._table:
-            yield item._key                                     # yield the KEY
 
 
 if __name__ == '__main__':
@@ -170,13 +126,14 @@ if __name__ == '__main__':
                 DATA = fp.read().replace('\n', ' ')
                 for value in re.findall(r"[\w']+", DATA):
                     if value not in stopwordsSCHashST:
-                        words_tree[counter] = value
+                        words_tree.__setitem__(counter, value, set_doc=_file)
+
                         counter += 1
                 fp.close()
 
     print(counter)
 
     for i in words_tree:
-        print words_tree[i]
+        print words_tree.__getitem__(i,get_doc=True).doc_list
 
     print(len(words_tree))

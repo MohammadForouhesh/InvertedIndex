@@ -3,6 +3,7 @@ import os
 import re
 
 from BST import BST
+from SeparateChainingHashST import SCHashST
 from LinkedList import LinkedList
 from LinkedQueue import LinkedQueue
 from TST import TST
@@ -16,6 +17,7 @@ class TreeBuilder:
         self.stopwordsBST = BST()
         self.stopwordsTST = TST()
         self.stopwordsTrie = TrieST()
+        self.stopwordsSCHashST = SCHashST()
         self.words_tree = TST()
         self.stopwords_init()
         self._build(directory_entered)
@@ -42,6 +44,11 @@ class TreeBuilder:
             self.stopwordsTrie.put(str(q.element), i, None)
             i += 1
         self.stopwordsTrie.validation()
+
+        i = 0
+        for q in fileQueue:
+            self.stopwordsSCHashST[i] = q.element
+            i += 1
 
     def _build(self, directory_entered):
         debug = list()
@@ -146,25 +153,29 @@ class TreeBuilder:
 
         elif unicode(self.tree_type) == unicode('SCHashST'):
             print("----------------------------------------")
-            print("TrieST")
-            print(type(self.tree_type))
+            print("SCHashST")
             print("----------------------------------------")
             # Trie Search
-            self.words_tree = TrieST()
+            self.words_tree = SCHashST()
             counter = 0
-            for subdir, dirs, files in os.walk(directory_entered.toString()):
+            for subdir, dirs, files in os.walk("/home/maometto/Documents/black"):
                 for _file in files:
                     if _file.endswith('.txt'):
-                        self.files_list.append((str(_file)))
+                        # self.files_list.append((str(_file)))
                         fp = open(os.path.join(subdir, _file), 'r+')
                         DATA = fp.read().replace('\n', ' ')
-                        for key in re.findall(r"[\w']+", DATA):
-                            if len(self.stopwordsTrie.keysWithPrefix(key)) == 0:
-                                # if len(self.words_tree.keysThatMatch(key)) == 0:
-                                self.words_tree.put(str(key), counter, _file)
+                        for value in re.findall(r"[\w']+", DATA):
+                            if value not in self.stopwordsSCHashST:
+                                self.words_tree[counter] = value
                                 counter += 1
                         fp.close()
-            self.words_tree.validation()
+
+            print(counter)
+
+            for i in self.words_tree:
+                print self.words_tree[i]
+
+            print(len(self.words_tree))
 
         else:
             pass

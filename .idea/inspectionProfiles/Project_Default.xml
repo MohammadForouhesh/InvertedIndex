@@ -1,0 +1,15 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="Jython_GUI.LinkedBinaryTree.Tree" />
+          <option value="Jython_GUI.LinkedBinaryTree.BinaryTree" />
+          <option value="Jython_GUI.AVLTreeST.TreeMap" />
+          <option value="super._Node" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
