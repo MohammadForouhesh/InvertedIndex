@@ -78,15 +78,25 @@ class GUI(java.lang.Runnable):
     def builder(self, tree_name):
         self.files_list = None
         self.tree_builder = TreeBuilder(tree_name, self.directory)
+        print(self.tree_builder.tree_type)
         self.files_list = self.tree_builder.files_list
         # ------------------------------------- projectile -------------------------------------
         number = 1
         for word in self.tree_builder.words_tree.traverse():
             temp_list = list()
             temp_list.append("[*{}*] ".format(number) + str(word) + " *--->  ")
-            for doc in self.tree_builder.words_tree.__getitem__(word, trav=True).doc_list:
-                if doc[:-4] not in temp_list:
-                    temp_list.append(doc[:-4])
+            if unicode(self.tree_builder.tree_type) == unicode('SCHashST'):
+                try:
+                    for doc in self.tree_builder.words_tree.__getitem__(number, trav=True).doc_list:
+                        if doc not in temp_list:
+                            temp_list.append(str(doc))
+                except AttributeError:
+                    pass
+            else:
+                for doc in self.tree_builder.words_tree.__getitem__(word, trav=True).doc_list:
+                    if doc[:-4] not in temp_list:
+                        temp_list.append(doc[:-4])
+
             self.bufferizer(temp_list)
             number += 1
 
@@ -242,6 +252,9 @@ class GUI(java.lang.Runnable):
                     self.tree_builder.words_tree.traverse()
                     self.bufferizer(self.tree_builder.words_tree.content, length=5, seprator="\t")
 
+                elif unicode(tree_type) == unicode('SCHashST'):
+                    self.bufferizer(self.tree_builder.words_tree.traverse(), length=5, seprator="\t")
+
                 return True
             elif current_state == 10:
                 self.bufferizer(self.files_list, length=5, seprator="\t")
@@ -366,7 +379,7 @@ class GUI(java.lang.Runnable):
         self.addCB(cp, 'TST')
         self.addCB(cp, 'BST')
         self.addCB(cp, 'TrieST')
-        self.addCB(cp, 'ScHashST')
+        self.addCB(cp, 'SCHashST')
 
         panel[5] = JPanel()
         panel[5].setLayout(FlowLayout())

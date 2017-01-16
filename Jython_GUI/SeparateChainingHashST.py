@@ -1,29 +1,11 @@
-from collections import MutableMapping
+
 from random import randrange
 
 from UnsortedTable import UnsortedTableMap
 from LinkedQueue import LinkedQueue
 
 
-class SCHashST(MutableMapping):
-    """Hash map implemented with separate chaining for collision resolution.
-    class _Item:
-        \"""store key-value pairs.\"""
-
-        def __init__(self, k, v):
-            self._key = k
-            self._value = v
-            self.doc_list = list()
-
-        def __eq__(self, other):
-            return self._key == other._key
-
-        def __ne__(self, other):
-            return not (self == other)
-
-        def __lt__(self, other):
-            return self._key < other._key
-"""
+class SCHashST:
     def __init__(self, cap=11, p=109345121):
         self._table = cap * [None]
         self._n = 0
@@ -53,7 +35,7 @@ class SCHashST(MutableMapping):
         if self._n > len(self._table) // 2:                     # keep load factor <= 0.5
             self._resize(2 * len(self._table) - 1)              # number 2^x - 1 is often prime by Fermat theoriem
 
-    def put(self, key, value, set_doc):
+    def setitem_(self, key, value, set_doc):
         j = self._hash_function(key)
         self._bucket_setitem(j, key, value, set_doc)
         if self._n > len(self._table) // 2:                     # keep load factor <= 0.5
@@ -72,12 +54,12 @@ class SCHashST(MutableMapping):
         self._table = c * [None]
         self._n = 0
         for (k, v, doc) in old:
-            self.put(k, v, set_doc=doc)
+            self.setitem_(k, v, set_doc=doc)
 
     def _bucket_getitem(self, j, key, get_doc=False, trav=False):
         bucket = self._table[j]
-        if bucket is None:
-            raise KeyError('Key Error: ' + repr(key))
+        # if bucket is None:
+            # raise KeyError('Key Error: ' + repr(key))
         return bucket.__getitem__(key, get_doc=get_doc, trav=trav)
 
     def _bucket_setitem(self, j, key, value, set_doc):              # j = hash code
@@ -100,6 +82,10 @@ class SCHashST(MutableMapping):
             raise KeyError('Key Error: ' + repr(key))
         del bucket[key]
 
+    def traverse(self):
+        for i in self:
+            yield self[i]
+
     def __iter__(self):
         for bucket in self._table:
             if bucket is not None:
@@ -120,7 +106,7 @@ if __name__ == '__main__':
 
     i = 0
     for q in fileQueue:
-        stopwordsSCHashST.put(i, q.element, "ahmadPanah")
+        stopwordsSCHashST.setitem_(i, q.element, "ahmadPanah")
         i += 1
 
     print("----------------------------------------")
@@ -137,7 +123,7 @@ if __name__ == '__main__':
                 DATA = fp.read().replace('\n', ' ')
                 for value in re.findall(r"[\w']+", DATA):
                     if value not in stopwordsSCHashST:
-                        words_tree.put(counter, value, _file)
+                        words_tree.setitem_(counter, value, _file)
                         counter += 1
                 fp.close()
 

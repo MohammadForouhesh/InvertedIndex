@@ -32,15 +32,18 @@ class UnsortedTableMap(MutableMapping):
         return False
 
     def __getitem__(self, k, get_doc=False, trav=False):
-        for item in self._table:
-            if k == item._key:
-                if get_doc:
-                    return item.doc_list
-                elif trav:
-                    return item
-                else:
-                    return item._value
-        raise KeyError('Key Error: ' + repr(k))
+        try:
+            for item in self._table:
+                if k == item._key:
+                    if get_doc:
+                        return item.doc_list
+                    elif trav:
+                        return item
+                    else:
+                        return item._value
+        except KeyError:
+            pass
+        #raise ('Key Error: ' + repr(k))
 
     def __setitem__(self, k, v, set_doc=None):
         for item in self._table:

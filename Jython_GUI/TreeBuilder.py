@@ -55,6 +55,7 @@ class TreeBuilder:
         debug1 = list()
         if True:  # os.path.isdir(directory_entered.get()):
             if unicode(self.tree_type) == unicode('TST'):
+                print(self.tree_type, "kir")
                 print("----------------------------------------")
                 print("TST")
                 print(type(self.tree_type))
@@ -72,7 +73,7 @@ class TreeBuilder:
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTST.keysThatMatch(key)) == 0:
                                     # if len(self.words_tree.keysThatMatch(key)) == 0:
-                                    self.words_tree.put(str(key), counter, _file)
+                                    self.words_tree.setitem_(str(key), counter, _file)
                                     counter += 1
 
                             fp.close()
@@ -146,36 +147,36 @@ class TreeBuilder:
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTrie.keysWithPrefix(key)) == 0:
                                     # if len(self.words_tree.keysThatMatch(key)) == 0:
-                                    self.words_tree.put(str(key), counter, _file)
+                                    self.words_tree.setitem_(str(key), counter, _file)
                                     counter += 1
                             fp.close()
                 self.words_tree.validation()
 
-        elif unicode(self.tree_type) == unicode('SCHashST'):
-            print("----------------------------------------")
-            print("SCHashST")
-            print("----------------------------------------")
+            elif unicode(self.tree_type) == unicode('SCHashST'):
+                print("----------------------------------------")
+                print("SCHashST")
+                print("----------------------------------------")
 
-            words_tree = SCHashST()
-            counter = 0
-            for subdir, dirs, files in os.walk(directory_entered.toString()):
-                for _file in files:
-                    if _file.endswith('.txt'):
-                        self.files_list.append((str(_file)))
-                        fp = open(os.path.join(subdir, _file), 'r+')
-                        DATA = fp.read().replace('\n', ' ')
-                        for value in re.findall(r"[\w']+", DATA):
-                            if value not in self.stopwordsSCHashST:
-                                words_tree.put(counter, value, _file)
-                                counter += 1
-                        fp.close()
+                self.words_tree = SCHashST()
+                counter = 0
+                for subdir, dirs, files in os.walk(directory_entered.toString()):
+                    for _file in files:
+                        if _file.endswith('.txt'):
+                            self.files_list.append((str(_file)))
+                            fp = open(os.path.join(subdir, _file), 'r+')
+                            DATA = fp.read().replace('\n', ' ')
+                            for value in re.findall(r"[\w']+", DATA):
+                                if value not in self.stopwordsSCHashST:
+                                    self.words_tree.setitem_(counter, value, _file)
+                                    counter += 1
+                            fp.close()
 
-            print(counter)
+                print(counter)
 
-            for i in self.words_tree:
-                print self.words_tree[i]
+                for i in self.words_tree:
+                    print self.words_tree[i]
 
-            print(len(self.words_tree))
+                print(len(self.words_tree))
 
         else:
             pass
