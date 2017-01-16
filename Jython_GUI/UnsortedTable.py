@@ -5,10 +5,12 @@ class UnsortedTableMap(MutableMapping):
     class _Item:
         """store key-value pairs."""
 
-        def __init__(self, k, v):
+        def __init__(self, k, v, doc_list_appendance=None):
             self._key = k
             self._value = v
-            self.doc_list = [None]*12
+            self.doc_list = list()
+            if doc_list_appendance is not None:
+                self.doc_list.append(doc_list_appendance)
 
         def __eq__(self, other):
             return self._key == other._key
@@ -34,9 +36,12 @@ class UnsortedTableMap(MutableMapping):
         for item in self._table:
             if k == item._key:
                 item._value = v
-                item.doc_list.append(set_doc)
+                if set_doc is not None:
+                    item.doc_list.append(set_doc)
+                else:
+                    print("set_doc is none :|")
                 return
-        self._table.append(self._Item(k, v))
+        self._table.append(self._Item(k, v, set_doc))
 
     def __delitem__(self, k):
         for j in range(len(self._table)):
