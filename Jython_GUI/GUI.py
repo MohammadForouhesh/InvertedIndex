@@ -5,6 +5,8 @@ import java
 import re
 
 import sys
+
+import time
 from java.awt import EventQueue
 from javax.swing import JSeparator
 from java.awt import BorderLayout
@@ -77,8 +79,10 @@ class GUI(java.lang.Runnable):
 
     def builder(self, tree_name):
         self.files_list = None
+        start_time = time.time()
         self.tree_builder = TreeBuilder(tree_name, self.directory)
         print(self.tree_builder.tree_type)
+        print("--- %s seconds ---" % (time.time() - start_time))
         self.files_list = self.tree_builder.files_list
         # ------------------------------------- projectile -------------------------------------
         number = 1

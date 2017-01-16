@@ -1,7 +1,7 @@
 
 import os
 import re
-
+import time
 from BST import BST
 from SeparateChainingHashST import SCHashST
 from LinkedList import LinkedList
@@ -73,7 +73,7 @@ class TreeBuilder:
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTST.keysThatMatch(key)) == 0:
                                     # if len(self.words_tree.keysThatMatch(key)) == 0:
-                                    self.words_tree.setitem_(str(key), counter, _file)
+                                    self.words_tree.put(str(key), counter, _file)
                                     counter += 1
 
                             fp.close()
@@ -147,7 +147,7 @@ class TreeBuilder:
                             for key in re.findall(r"[\w']+", DATA):
                                 if len(self.stopwordsTrie.keysWithPrefix(key)) == 0:
                                     # if len(self.words_tree.keysThatMatch(key)) == 0:
-                                    self.words_tree.setitem_(str(key), counter, _file)
+                                    self.words_tree.put(str(key), counter, _file)
                                     counter += 1
                             fp.close()
                 self.words_tree.validation()
@@ -172,9 +172,6 @@ class TreeBuilder:
                             fp.close()
 
                 print(counter)
-
-                for i in self.words_tree:
-                    print self.words_tree[i]
 
                 print(len(self.words_tree))
 
