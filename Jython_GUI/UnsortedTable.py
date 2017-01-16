@@ -9,8 +9,8 @@ class UnsortedTableMap(MutableMapping):
             self._key = k
             self._value = v
             self.doc_list = list()
-            if doc_list_appendance is not None:
-                self.doc_list.append(doc_list_appendance)
+            # if doc_list_appendance is not None:
+            self.doc_list.append(doc_list_appendance)
 
         def __eq__(self, other):
             return self._key == other._key
@@ -32,7 +32,7 @@ class UnsortedTableMap(MutableMapping):
                 return item._value
         raise KeyError('Key Error: ' + repr(k))
 
-    def __setitem__(self, k, v, set_doc=None):
+    def __setitem__(self, k, v, set_doc):
         for item in self._table:
             if k == item._key:
                 item._value = v
