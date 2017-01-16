@@ -1,7 +1,5 @@
-from collections import MutableMapping
 
-
-class UnsortedTableMap(MutableMapping):
+class UnsortedTableMap:
     class _Item:
         """store key-value pairs."""
 
@@ -43,7 +41,6 @@ class UnsortedTableMap(MutableMapping):
                         return item._value
         except KeyError:
             pass
-        #raise ('Key Error: ' + repr(k))
 
     def __setitem__(self, k, v, set_doc=None):
         for item in self._table:

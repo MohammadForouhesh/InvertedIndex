@@ -55,7 +55,6 @@ class TreeBuilder:
         debug1 = list()
         if True:  # os.path.isdir(directory_entered.get()):
             if unicode(self.tree_type) == unicode('TST'):
-                print(self.tree_type, "kir")
                 print("----------------------------------------")
                 print("TST")
                 print(type(self.tree_type))
